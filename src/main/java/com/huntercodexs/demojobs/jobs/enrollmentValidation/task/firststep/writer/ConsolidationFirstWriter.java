@@ -14,6 +14,7 @@ public class ConsolidationFirstWriter implements ItemWriter<EnrollmentValidation
 
         enrollmentValidationDto.forEach(enrollmentItem -> {
             System.out.println("[WRITE] >>> ConsolidationWriter");
+            System.out.println(enrollmentItem.toString());
         });
 
     }

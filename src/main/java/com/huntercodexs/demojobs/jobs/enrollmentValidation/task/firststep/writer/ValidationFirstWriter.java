@@ -14,6 +14,7 @@ public class ValidationFirstWriter implements ItemWriter<EnrollmentValidationDto
 
         enrollmentValidationDto.forEach(enrollmentItem -> {
             System.out.println("[WRITE] >>> ValidationWriter");
+            System.out.println(enrollmentItem.getName());
         });
 
     }

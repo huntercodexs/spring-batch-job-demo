@@ -21,7 +21,7 @@ public class EnrollmentValidationFirstReader {
 
         String sql =
         """
-        SELECT * FROM PRODUCTS WHERE ID IS NOT NULL
+        SELECT * FROM PRODUCTS
         """;
 
         System.out.println("[READER-FIRST-STEP] >>> readerFirstStep");

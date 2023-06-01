@@ -5,11 +5,11 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class ValidationFirstProcessor implements ItemProcessor<EnrollmentValidationDto,EnrollmentValidationDto> {
+public class GeneratorFirstProcessor implements ItemProcessor<EnrollmentValidationDto, EnrollmentValidationDto> {
 
-    public EnrollmentValidationDto process(EnrollmentValidationDto enrollmentValidationDto) throws Exception {
+    public EnrollmentValidationDto process(EnrollmentValidationDto enrollmentValidationDto) {
 
-        System.out.println("[VALIDATION-PROCESSOR] >>> process");
+        System.out.println("[GENERATOR-PROCESSOR] >>> process");
         System.out.println(enrollmentValidationDto.toString());
 
         if (enrollmentValidationDto.getId() < 1) {
@@ -22,5 +22,7 @@ public class ValidationFirstProcessor implements ItemProcessor<EnrollmentValidat
         }
 
         return enrollmentValidationDto;
+
     }
+
 }

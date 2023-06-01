@@ -20,7 +20,7 @@ public class EnrollmentValidationSecondReader {
 
         String sql =
         """
-        SELECT * FROM PRODUCTS WHERE ID IS NOT NULL
+        SELECT * FROM PRODUCTS
         """;
 
         System.out.println("[READER-SECOND-STEP] >>> readerSecondStep");

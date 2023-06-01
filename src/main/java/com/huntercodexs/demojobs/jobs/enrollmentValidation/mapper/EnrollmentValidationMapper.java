@@ -17,7 +17,9 @@ public class EnrollmentValidationMapper implements RowMapper<EnrollmentValidatio
         enrollmentValidationDto.setDescription(rs.getString("DESCRIPTION"));
         enrollmentValidationDto.setPrice(rs.getString("PRICE"));
 
-        System.out.println("[MAPPER] >>> mapRow");
+        System.out.println("[READER] => [MAPPER] >>> mapRow");
+        System.out.println(rs.getInt("ID"));
+        System.out.println(rs.getString("NAME"));
 
         return enrollmentValidationDto;
     }
