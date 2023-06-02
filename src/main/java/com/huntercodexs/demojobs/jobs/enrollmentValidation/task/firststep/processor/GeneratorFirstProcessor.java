@@ -2,9 +2,9 @@ package com.huntercodexs.demojobs.jobs.enrollmentValidation.task.firststep.proce
 
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.dto.EnrollmentValidationDto;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
-@Configuration
+@Component
 public class GeneratorFirstProcessor implements ItemProcessor<EnrollmentValidationDto, EnrollmentValidationDto> {
 
     public EnrollmentValidationDto process(EnrollmentValidationDto enrollmentValidationDto) {

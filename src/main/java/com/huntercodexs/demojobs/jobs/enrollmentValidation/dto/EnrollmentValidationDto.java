@@ -12,5 +12,4 @@ public class EnrollmentValidationDto {
     private String name;
     private String description;
     private String price;
-
 }

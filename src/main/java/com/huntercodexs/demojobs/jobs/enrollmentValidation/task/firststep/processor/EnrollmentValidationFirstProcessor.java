@@ -23,8 +23,6 @@ public class EnrollmentValidationFirstProcessor {
 
         System.out.println("[PROCESSOR-FIRST-STEP] >>> processorFirstStep");
 
-//        return new ValidationFirstProcessor();
-
         return new CompositeItemProcessorBuilder<EnrollmentValidationDto, EnrollmentValidationDto>()
                 .delegates(Arrays.asList(validationFirstProcessor, generatorFirstProcessor))
                 .build();

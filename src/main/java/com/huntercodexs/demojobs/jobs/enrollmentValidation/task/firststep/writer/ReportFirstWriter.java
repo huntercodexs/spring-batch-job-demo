@@ -2,11 +2,11 @@ package com.huntercodexs.demojobs.jobs.enrollmentValidation.task.firststep.write
 
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.dto.EnrollmentValidationDto;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Configuration
+@Component
 public class ReportFirstWriter implements ItemWriter<EnrollmentValidationDto> {
 
     @Override

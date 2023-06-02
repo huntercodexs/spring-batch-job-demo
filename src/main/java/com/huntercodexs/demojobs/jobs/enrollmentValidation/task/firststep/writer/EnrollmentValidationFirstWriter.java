@@ -21,13 +21,20 @@ public class EnrollmentValidationFirstWriter {
     @Autowired
     ConsolidationFirstWriter consolidationFirstWriter;
 
+    @Autowired
+    GeneratorFirstWriter generatorFirstWriter;
+
     @Bean("writerFirstStep")
     public ItemWriter<EnrollmentValidationDto> writerFirstStep() {
 
         System.out.println("[WRITER-FIRST-STEP] >>> writerFirstStep");
 
         return new CompositeItemWriterBuilder<EnrollmentValidationDto>()
-            .delegates(Arrays.asList(validationFirstWriter, reportFirstWriter, consolidationFirstWriter))
-            .build();
+            .delegates(Arrays.asList(
+                    validationFirstWriter,
+                    reportFirstWriter,
+                    consolidationFirstWriter,
+                    generatorFirstWriter
+            )).build();
     }
 }

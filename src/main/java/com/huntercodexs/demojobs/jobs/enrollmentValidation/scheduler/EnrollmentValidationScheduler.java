@@ -25,7 +25,7 @@ public class EnrollmentValidationScheduler {
         System.out.println("[SCHEDULER][TRIGGER] >>> enrollmentValidationTrigger");
 
         CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder
-            .dailyAtHourAndMinute(23, 20);
+            .dailyAtHourAndMinute(23, 59);
 
         return TriggerBuilder
             .newTrigger()
