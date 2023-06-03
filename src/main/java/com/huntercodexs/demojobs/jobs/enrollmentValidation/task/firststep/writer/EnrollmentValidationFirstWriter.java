@@ -24,6 +24,9 @@ public class EnrollmentValidationFirstWriter {
     @Autowired
     GeneratorFirstWriter generatorFirstWriter;
 
+    @Autowired
+    SendFileToSftpWriter sendFileToSftpWriter;
+
     @Bean("writerFirstStep")
     public ItemWriter<EnrollmentValidationDto> writerFirstStep() {
 
@@ -34,7 +37,8 @@ public class EnrollmentValidationFirstWriter {
                     validationFirstWriter,
                     reportFirstWriter,
                     consolidationFirstWriter,
-                    generatorFirstWriter
+                    generatorFirstWriter,
+                    sendFileToSftpWriter
             )).build();
     }
 }

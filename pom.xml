@@ -111,6 +111,12 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!--SFTP-->
+		<dependency>
+			<groupId>org.springframework.integration</groupId>
+			<artifactId>spring-integration-sftp</artifactId>
+		</dependency>
+
 		<!--TOOLS-->
 		<dependency>
 			<groupId>org.slf4j</groupId>
