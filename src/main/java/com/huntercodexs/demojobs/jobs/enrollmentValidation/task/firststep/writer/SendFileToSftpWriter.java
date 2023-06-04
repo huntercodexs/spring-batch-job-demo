@@ -56,8 +56,6 @@ public class SendFileToSftpWriter implements ItemWriter<EnrollmentValidationDto>
 
             String line = "";
             while ( ( line = bufferedReader.readLine() ) != null) {
-                System.out.println("LINE IN THE FILE IS");
-                System.out.println(line);
                 fileContent.append(line).append("\n");
             }
 

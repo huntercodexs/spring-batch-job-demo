@@ -1,6 +1,6 @@
 package com.huntercodexs.demojobs.jobs.enrollmentValidation.scheduler;
 
-import com.huntercodexs.demojobs.jobs.enrollmentValidation.config.EnrollmentValidationConfigQuartz;
+import com.huntercodexs.demojobs.jobs.enrollmentValidation.config.EnrollmentValidationQuartzConfig;
 import org.quartz.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +14,7 @@ public class EnrollmentValidationScheduler {
         System.out.println("[SCHEDULER][JOB-DETAIL] >>> enrollmentValidationJobDetail");
 
         return JobBuilder
-            .newJob(EnrollmentValidationConfigQuartz.class)
+            .newJob(EnrollmentValidationQuartzConfig.class)
             .storeDurably()
             .build();
     }
@@ -22,10 +22,10 @@ public class EnrollmentValidationScheduler {
     @Bean
     public Trigger enrollmentValidationTrigger() {
 
-        System.out.println("[SCHEDULER][TRIGGER] >>> enrollmentValidationTrigger");
+        System.out.println("[DEBUG] [SCHEDULER][TRIGGER] >>> enrollmentValidationTrigger");
 
         CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder
-            .dailyAtHourAndMinute(23, 50);
+            .dailyAtHourAndMinute(18, 51);
 
         return TriggerBuilder
             .newTrigger()

@@ -9,16 +9,16 @@ public class GeneratorFirstProcessor implements ItemProcessor<EnrollmentValidati
 
     public EnrollmentValidationDto process(EnrollmentValidationDto enrollmentValidationDto) {
 
-        System.out.println("[GENERATOR-PROCESSOR] >>> process");
+        System.out.println("[DEBUG] [GENERATOR-PROCESSOR] >>> process");
         System.out.println(enrollmentValidationDto.toString());
 
         if (enrollmentValidationDto.getId() < 1) {
-            System.out.println("Missing item id: " + enrollmentValidationDto.getId());
+            System.out.println("[DEBUG] Missing item id: " + enrollmentValidationDto.getId());
             return null;
         }
 
         if (enrollmentValidationDto.getName().equals("")) {
-            System.out.println("Missing item name: " + enrollmentValidationDto.getName());
+            System.out.println("[DEBUG] Missing item name: " + enrollmentValidationDto.getName());
         }
 
         return enrollmentValidationDto;

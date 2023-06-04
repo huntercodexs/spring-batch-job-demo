@@ -24,7 +24,7 @@ public class EnrollmentValidationFirstReader {
         SELECT * FROM PRODUCTS
         """;
 
-        System.out.println("[READER-FIRST-STEP] >>> readerFirstStep");
+        System.out.println("[DEBUG] [READER-FIRST-STEP] >>> readerFirstStep");
 
         return new JdbcCursorItemReaderBuilder<EnrollmentValidationDto>()
             .name("firstStepReader")

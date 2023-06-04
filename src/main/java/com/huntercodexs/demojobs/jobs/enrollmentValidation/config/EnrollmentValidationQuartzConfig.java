@@ -14,7 +14,7 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 import java.util.Date;
 
 @DisallowConcurrentExecution
-public class EnrollmentValidationConfigQuartz extends QuartzJobBean {
+public class EnrollmentValidationQuartzConfig extends QuartzJobBean {
 
     @Autowired
     @Qualifier("enrollmentValidationJob")
@@ -27,7 +27,7 @@ public class EnrollmentValidationConfigQuartz extends QuartzJobBean {
     @Override
     protected void executeInternal(JobExecutionContext context) {
 
-        System.out.println("[QUARTZ] >>> executeInternal");
+        System.out.println("[DEBUG] [QUARTZ] >>> executeInternal");
 
         JobParameters jobParameters = new JobParametersBuilder(this.jobExplorer)
             .addDate("date", new Date())

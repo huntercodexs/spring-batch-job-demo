@@ -13,8 +13,8 @@ public class ReportFirstWriter implements ItemWriter<EnrollmentValidationDto> {
     public void write(List<? extends EnrollmentValidationDto> enrollmentValidationDto) {
 
         enrollmentValidationDto.forEach(enrollmentItem -> {
-            System.out.println("[WRITE] >>> ReportWriter");
-            System.out.println(enrollmentItem.toString());
+            System.out.println("[DEBUG] [WRITE] >>> ReportWriter");
+            System.out.println("[DEBUG]" + enrollmentItem.toString());
         });
 
     }

@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableBatchProcessing
-public class EnrollmentValidationConfigJob {
+public class EnrollmentValidationJobConfig {
 
     @Autowired
     JobBuilderFactory jobBuilderFactory;
@@ -24,7 +24,7 @@ public class EnrollmentValidationConfigJob {
         @Qualifier("thirdStep") Step step3
     ) {
 
-        System.out.println("[JOB-CONFIG] >>> enrollmentValidationJob");
+        System.out.println("[DEBUG] [JOB-CONFIG] >>> enrollmentValidationJob");
 
         return jobBuilderFactory
                 .get("enrollmentValidationJob")
