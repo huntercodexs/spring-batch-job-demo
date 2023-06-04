@@ -10,5 +10,5 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class XmlHandlerDto {
-    List<XmlHandlerFields> xmlHandlerDtoList;
+    List<XmlHandlerFieldsDto> xmlHandlerListDto;
 }
