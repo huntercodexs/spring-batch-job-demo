@@ -15,8 +15,11 @@ import java.util.List;
 @Component
 public class GeneratorFirstWriter implements ItemWriter<EnrollmentValidationDto> {
 
-    @Value("${csv.filepath}")
-    String csvFilepath;
+    @Value("${txt.filepath}")
+    String txtFilepath;
+
+    @Value("${txt.filename}")
+    String txtFilename;
 
     @Autowired
     XmlToJsonTemplate xmlToJsonTemplate;
@@ -41,7 +44,7 @@ public class GeneratorFirstWriter implements ItemWriter<EnrollmentValidationDto>
 
     private void fileGeneratorByStream(EnrollmentValidationDto enrollmentValidationDto) throws IOException, ParserConfigurationException, SAXException {
 
-        OutputStream os = new FileOutputStream(csvFilepath+"spring-batch-job-demo-data.txt", true);
+        OutputStream os = new FileOutputStream(txtFilepath.replaceAll("/$", "") +"/"+ txtFilename, true);
         Writer wr = new OutputStreamWriter(os);
         BufferedWriter br = new BufferedWriter(wr);
 
@@ -60,8 +63,8 @@ public class GeneratorFirstWriter implements ItemWriter<EnrollmentValidationDto>
 
     private void fileGeneratorByIO(EnrollmentValidationDto enrollmentValidationDto) throws IOException {
 
-        File path = new File(csvFilepath);
-        File file = new File(path, "spring-batch-job-demo-data.txt");
+        File path = new File(txtFilepath);
+        File file = new File(path, txtFilename);
 
         String record = "";
 
