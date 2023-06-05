@@ -18,8 +18,11 @@ public class SendFileToSftpWriter implements ItemWriter<EnrollmentValidationDto>
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("uuuuMMddHHmmss");
 
-    @Value("${csv.filepath}")
-    String csvFilepath;
+    @Value("${txt.filepath}")
+    String txtFilepath;
+
+    @Value("${txt.filename}")
+    String txtFilename;
 
     @Autowired
     SftpHandler sftpHandler;
@@ -31,13 +34,23 @@ public class SendFileToSftpWriter implements ItemWriter<EnrollmentValidationDto>
         String dateTimeFormat = dateTimeNow.format(FORMATTER);
 
         System.out.println("[DEBUG] >>> SFTP FILE");
-        sftpHandler.uploadFile(fileExtractor(), "spring-batch-job-demo-data-"+dateTimeFormat+".txt");
-        makeFileProcessed("spring-batch-job-demo-data.txt", dateTimeFormat);
+
+        try {
+            sftpHandler.uploadFile(fileExtractor(), txtFilename.split("\\.")[0] + "-" + dateTimeFormat + ".txt");
+        } catch (RuntimeException re) {
+            System.out.println(re.getMessage());
+        }
+
+        try {
+            makeFileProcessed(txtFilename, dateTimeFormat);
+        } catch (RuntimeException re) {
+            System.out.println(re.getMessage());
+        }
 
     }
 
     private InputStream fileExtractor() throws FileNotFoundException {
-        String content = fileReader(csvFilepath + "spring-batch-job-demo-data.txt");
+        String content = fileReader(txtFilepath.replaceAll("/$", "") +"/"+ txtFilename);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
         return inputStream;
     }
@@ -46,8 +59,8 @@ public class SendFileToSftpWriter implements ItemWriter<EnrollmentValidationDto>
 
         StringBuilder fileContent = new StringBuilder();
 
-        File path = new File(csvFilepath);
-        File file = new File(path, "spring-batch-job-demo-data.txt");
+        File path = new File(txtFilepath);
+        File file = new File(path, txtFilename);
 
         try {
 
@@ -73,8 +86,8 @@ public class SendFileToSftpWriter implements ItemWriter<EnrollmentValidationDto>
         String name = array[0];
         String extension = array[1];
 
-        File oldName = new File(csvFilepath+filename);
-        File newName = new File(csvFilepath+name+"-"+stamp+"."+extension+".processed");
+        File oldName = new File(txtFilepath +filename);
+        File newName = new File(txtFilepath +name+"-"+stamp+"."+extension+".processed");
 
         if (oldName.renameTo(newName)) {
             System.out.println("[DEBUG] File renamed successful");

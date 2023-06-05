@@ -9,12 +9,16 @@ import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import java.util.Date;
 
 @DisallowConcurrentExecution
 public class EnrollmentValidationQuartzConfig extends QuartzJobBean {
+
+    @Value("${job.enrollment-validation.enabled:true}")
+    boolean jobEnabled;
 
     @Autowired
     @Qualifier("enrollmentValidationJob")
@@ -26,6 +30,7 @@ public class EnrollmentValidationQuartzConfig extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext context) {
+        if (!jobEnabled) return;
 
         System.out.println("[DEBUG] [QUARTZ] >>> executeInternal");
 

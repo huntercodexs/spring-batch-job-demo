@@ -1,18 +1,20 @@
 package codexstester.test.unitary;
 
 import codexstester.setup.bridge.EnrollmentValidationBridgeTests;
-import com.huntercodexs.demojobs.jobs.enrollmentValidation.xml.XmlHandler;
+import com.huntercodexs.demojobs.jobs.enrollmentValidation.dto.EnrollmentValidationDto;
+import com.huntercodexs.demojobs.jobs.enrollmentValidation.xml.XmlToJsonTemplate;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.util.List;
 
 public class EnrollmentValidationUnitaryTests extends EnrollmentValidationBridgeTests {
 
     @Autowired
-    XmlHandler xmlHandler;
+    XmlToJsonTemplate xmlToJsonTemplate;
 
     @Test
     public void propsTest() {
@@ -22,41 +24,50 @@ public class EnrollmentValidationUnitaryTests extends EnrollmentValidationBridge
     @Test
     public void xmlLoaderTest() throws ParserConfigurationException, IOException, SAXException {
 
-        xmlHandler.xmlLoader();
+        xmlToJsonTemplate.xmlLoader(null);
+        System.out.println(xmlToJsonTemplate.jsonObject());
+        System.out.println(xmlToJsonTemplate.jsonItem("price"));
+        System.out.println(xmlToJsonTemplate.jsonKeys(null));
+        System.out.println(xmlToJsonTemplate.format("price"));
 
-        System.out.println(xmlHandler.name(0));
-        System.out.println(xmlHandler.type(0));
-        System.out.println(xmlHandler.column(0));
-        System.out.println(xmlHandler.size(0));
-        System.out.println(xmlHandler.fill(0));
-        System.out.println(xmlHandler.align(0));
+    }
 
-        System.out.println(xmlHandler.name(1));
-        System.out.println(xmlHandler.type(1));
-        System.out.println(xmlHandler.column(1));
-        System.out.println(xmlHandler.size(1));
-        System.out.println(xmlHandler.fill(1));
-        System.out.println(xmlHandler.align(1));
+    @Test
+    public void dynamicTest() throws ParserConfigurationException, IOException, SAXException {
 
-        System.out.println(xmlHandler.name(2));
-        System.out.println(xmlHandler.type(2));
-        System.out.println(xmlHandler.column(2));
-        System.out.println(xmlHandler.size(2));
-        System.out.println(xmlHandler.fill(2));
-        System.out.println(xmlHandler.align(2));
+        EnrollmentValidationDto enrollmentValidationDto = new EnrollmentValidationDto();
 
-        System.out.println(xmlHandler.name(3));
-        System.out.println(xmlHandler.type(3));
-        System.out.println(xmlHandler.column(3));
-        System.out.println(xmlHandler.size(3));
-        System.out.println(xmlHandler.fill(3));
-        System.out.println(xmlHandler.align(3));
+        try {
+            EnrollmentValidationDto.class.getDeclaredField("id").set(enrollmentValidationDto, 12345);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
 
-        System.out.println(xmlHandler.format(0));
-        System.out.println(xmlHandler.format(1));
-        System.out.println(xmlHandler.format(2));
-        System.out.println(xmlHandler.format(3));
+        try {
+            System.out.println(EnrollmentValidationDto.class.getDeclaredField("id").get(enrollmentValidationDto));
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
 
+        String record = "";
+        List<String> dtoKeys = xmlToJsonTemplate.jsonKeys(null);
+
+        for (String dtoKey : dtoKeys) {
+
+            try {
+                record += String.format(
+                        xmlToJsonTemplate.format(dtoKey),
+                        EnrollmentValidationDto.class.getDeclaredField(dtoKey).get(enrollmentValidationDto)) + " ";
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (NoSuchFieldException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
 }

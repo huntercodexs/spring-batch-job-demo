@@ -7,12 +7,16 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableBatchProcessing
 public class EnrollmentValidationJobConfig {
+
+    @Value("${job.enrollment-validation.enabled:true}")
+    boolean jobEnabled;
 
     @Autowired
     JobBuilderFactory jobBuilderFactory;
@@ -23,6 +27,7 @@ public class EnrollmentValidationJobConfig {
         @Qualifier("secondStep") Step step2,
         @Qualifier("thirdStep") Step step3
     ) {
+        if (!jobEnabled) return null;
 
         System.out.println("[DEBUG] [JOB-CONFIG] >>> enrollmentValidationJob");
 
