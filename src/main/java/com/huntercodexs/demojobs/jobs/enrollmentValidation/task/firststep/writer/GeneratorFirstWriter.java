@@ -1,7 +1,7 @@
 package com.huntercodexs.demojobs.jobs.enrollmentValidation.task.firststep.writer;
 
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.dto.EnrollmentValidationDto;
-import com.huntercodexs.demojobs.jobs.enrollmentValidation.xml.XmlHandler;
+import com.huntercodexs.demojobs.jobs.enrollmentValidation.xml.XmlToJsonTemplate;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,12 +19,12 @@ public class GeneratorFirstWriter implements ItemWriter<EnrollmentValidationDto>
     String csvFilepath;
 
     @Autowired
-    XmlHandler xmlHandler;
+    XmlToJsonTemplate xmlToJsonTemplate;
 
     @Override
     public void write(List<? extends EnrollmentValidationDto> enrollmentValidationDto) throws ParserConfigurationException, IOException, SAXException {
 
-        xmlHandler.xmlLoader();
+        xmlToJsonTemplate.xmlLoader(null);
 
         enrollmentValidationDto.forEach(enrollmentItem -> {
             System.out.println("[DEBUG] [WRITE] >>> GeneratorFirstWriter");
@@ -39,7 +39,7 @@ public class GeneratorFirstWriter implements ItemWriter<EnrollmentValidationDto>
 
     }
 
-    private void fileGeneratorByStream(EnrollmentValidationDto enrollmentItem) throws IOException, ParserConfigurationException, SAXException {
+    private void fileGeneratorByStream(EnrollmentValidationDto enrollmentValidationDto) throws IOException, ParserConfigurationException, SAXException {
 
         OutputStream os = new FileOutputStream(csvFilepath+"spring-batch-job-demo-data.txt", true);
         Writer wr = new OutputStreamWriter(os);
@@ -47,10 +47,10 @@ public class GeneratorFirstWriter implements ItemWriter<EnrollmentValidationDto>
 
         String record = "";
 
-        record += String.format(xmlHandler.format(0), enrollmentItem.getId()) + " ";
-        record += String.format(xmlHandler.format(1), enrollmentItem.getName()) + " ";
-        record += String.format(xmlHandler.format(2), enrollmentItem.getDescription()) + " ";
-        record += String.format(xmlHandler.format(3), enrollmentItem.getPrice());
+        record += String.format(xmlToJsonTemplate.format("id"), enrollmentValidationDto.getId()) + " ";
+        record += String.format(xmlToJsonTemplate.format("name"), enrollmentValidationDto.getName()) + " ";
+        record += String.format(xmlToJsonTemplate.format("description"), enrollmentValidationDto.getDescription()) + " ";
+        record += String.format(xmlToJsonTemplate.format("price"), enrollmentValidationDto.getPrice());
 
         br.write(record);
         br.newLine();
@@ -58,17 +58,17 @@ public class GeneratorFirstWriter implements ItemWriter<EnrollmentValidationDto>
 
     }
 
-    private void fileGeneratorByIO(EnrollmentValidationDto enrollmentItem) throws IOException {
+    private void fileGeneratorByIO(EnrollmentValidationDto enrollmentValidationDto) throws IOException {
 
         File path = new File(csvFilepath);
         File file = new File(path, "spring-batch-job-demo-data.txt");
 
         String record = "";
 
-        record += String.format(xmlHandler.format(0), enrollmentItem.getId());
-        record += String.format(xmlHandler.format(1), enrollmentItem.getName());
-        record += String.format(xmlHandler.format(2), enrollmentItem.getDescription());
-        record += String.format(xmlHandler.format(3), enrollmentItem.getPrice());
+        record += String.format(xmlToJsonTemplate.format("id"), enrollmentValidationDto.getId()) + " ";
+        record += String.format(xmlToJsonTemplate.format("name"), enrollmentValidationDto.getName()) + " ";
+        record += String.format(xmlToJsonTemplate.format("description"), enrollmentValidationDto.getDescription()) + " ";
+        record += String.format(xmlToJsonTemplate.format("price"), enrollmentValidationDto.getPrice());
 
         FileWriter fileWriter = new FileWriter(file, true);
         PrintWriter printWriter = new PrintWriter(fileWriter);
