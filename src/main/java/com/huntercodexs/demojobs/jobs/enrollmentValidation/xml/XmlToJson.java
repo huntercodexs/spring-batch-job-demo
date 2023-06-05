@@ -38,14 +38,19 @@ public class XmlToJson {
 
         if (xmlOverwrite != null) xmlFilename = xmlOverwrite;
 
-        File file = new File("src/main/resources/"+xmlFilename);
+        try {
+            File file = new File("src/main/resources/" + xmlFilename);
 
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        Document document = db.parse(file);
-        document.getDocumentElement().normalize();
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document document = db.parse(file);
+            document.getDocumentElement().normalize();
 
-        return document;
+            return document;
+
+        } catch (RuntimeException re) {
+            throw new RuntimeException(re.getMessage());
+        }
     }
 
     public String[] xmlFields(String xmlOverwrite) throws ParserConfigurationException, IOException, SAXException {

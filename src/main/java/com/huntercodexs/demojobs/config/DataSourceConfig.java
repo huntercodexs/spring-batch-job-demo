@@ -29,4 +29,5 @@ public class DataSourceConfig {
     public DataSource oraclelinuxDataSource() {
         return DataSourceBuilder.create().build();
     }
+
 }

@@ -34,8 +34,18 @@ public class SendFileToSftpWriter implements ItemWriter<EnrollmentValidationDto>
         String dateTimeFormat = dateTimeNow.format(FORMATTER);
 
         System.out.println("[DEBUG] >>> SFTP FILE");
-        sftpHandler.uploadFile(fileExtractor(), "spring-batch-job-demo-data-"+dateTimeFormat+".txt");
-        makeFileProcessed(txtFilename, dateTimeFormat);
+
+        try {
+            sftpHandler.uploadFile(fileExtractor(), txtFilename.split("\\.")[0] + "-" + dateTimeFormat + ".txt");
+        } catch (RuntimeException re) {
+            System.out.println(re.getMessage());
+        }
+
+        try {
+            makeFileProcessed(txtFilename, dateTimeFormat);
+        } catch (RuntimeException re) {
+            System.out.println(re.getMessage());
+        }
 
     }
 

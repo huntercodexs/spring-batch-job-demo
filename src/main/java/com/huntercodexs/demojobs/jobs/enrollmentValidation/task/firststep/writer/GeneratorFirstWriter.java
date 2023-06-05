@@ -35,14 +35,14 @@ public class GeneratorFirstWriter implements ItemWriter<EnrollmentValidationDto>
 
             try {
                 fileGeneratorByStream(enrollmentItem);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex.getMessage());
             }
         });
 
     }
 
-    private void fileGeneratorByStream(EnrollmentValidationDto enrollmentValidationDto) throws IOException, ParserConfigurationException, SAXException {
+    private void fileGeneratorByStream(EnrollmentValidationDto enrollmentValidationDto) throws IOException {
 
         OutputStream os = new FileOutputStream(txtFilepath.replaceAll("/$", "") +"/"+ txtFilename, true);
         Writer wr = new OutputStreamWriter(os);
