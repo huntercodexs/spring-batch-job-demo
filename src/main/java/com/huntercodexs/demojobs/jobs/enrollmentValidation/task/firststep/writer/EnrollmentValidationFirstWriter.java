@@ -13,19 +13,13 @@ import java.util.Arrays;
 public class EnrollmentValidationFirstWriter {
 
     @Autowired
-    ValidationFirstWriter validationFirstWriter;
-
-    @Autowired
-    ReportFirstWriter reportFirstWriter;
-
-    @Autowired
-    ConsolidationFirstWriter consolidationFirstWriter;
-
-    @Autowired
-    GeneratorFirstWriter generatorFirstWriter;
+    BuilderFileFirstWriter builderFileFirstWriter;
 
     @Autowired
     SendFileToSftpWriter sendFileToSftpWriter;
+
+    @Autowired
+    ReportFirstWriter reportFirstWriter;
 
     @Bean("writerFirstStep")
     public ItemWriter<EnrollmentValidationDto> writerFirstStep() {
@@ -34,11 +28,9 @@ public class EnrollmentValidationFirstWriter {
 
         return new CompositeItemWriterBuilder<EnrollmentValidationDto>()
             .delegates(Arrays.asList(
-                    validationFirstWriter,
-                    reportFirstWriter,
-                    consolidationFirstWriter,
-                    generatorFirstWriter,
-                    sendFileToSftpWriter
+                    builderFileFirstWriter,
+                    sendFileToSftpWriter,
+                    reportFirstWriter
             )).build();
     }
 }
