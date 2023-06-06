@@ -3,6 +3,7 @@ package codexstester.test.unitary;
 import codexstester.setup.bridge.EnrollmentValidationBridgeTests;
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.dto.EnrollmentValidationDto;
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.sftp.SftpHandler;
+import com.huntercodexs.demojobs.jobs.enrollmentValidation.task.firststep.writer.ReportFirstWriter;
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.xml.XmlToJsonTemplate;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,6 +22,9 @@ public class EnrollmentValidationUnitaryTests extends EnrollmentValidationBridge
 
     @Autowired
     SftpHandler sftpHandler;
+    
+    @Autowired
+    ReportFirstWriter reportFirstWriter;
 
     @Test
     public void propsTest() {
@@ -113,6 +118,18 @@ public class EnrollmentValidationUnitaryTests extends EnrollmentValidationBridge
     @Test
     public void sftpFilesTest() throws IOException {
         System.out.println(Arrays.toString(sftpHandler.files("upload/")));
+    }
+
+    @Test
+    public void emailSendTest() {
+        List<EnrollmentValidationDto> enrollmentValidationDtoList = new ArrayList<>();
+        EnrollmentValidationDto enrollmentValidationDto = new EnrollmentValidationDto();
+        enrollmentValidationDto.setId(12345);
+        enrollmentValidationDto.setName("Product Name");
+        enrollmentValidationDto.setDescription("Description to product");
+        enrollmentValidationDto.setPrice("100,00");
+        enrollmentValidationDtoList.add(enrollmentValidationDto);
+        reportFirstWriter.write(enrollmentValidationDtoList);
     }
 
 }

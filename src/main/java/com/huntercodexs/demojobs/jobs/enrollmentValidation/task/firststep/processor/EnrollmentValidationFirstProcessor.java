@@ -16,7 +16,7 @@ public class EnrollmentValidationFirstProcessor {
     ValidationFirstProcessor validationFirstProcessor;
 
     @Autowired
-    GeneratorFirstProcessor generatorFirstProcessor;
+    PreBuilderFileFirstProcessor preBuilderFileFirstProcessor;
 
     @Bean("processorFirstStep")
     public ItemProcessor<EnrollmentValidationDto, EnrollmentValidationDto> processorFirstStep() {
@@ -24,7 +24,7 @@ public class EnrollmentValidationFirstProcessor {
         System.out.println("[DEBUG] [PROCESSOR-FIRST-STEP] >>> processorFirstStep");
 
         return new CompositeItemProcessorBuilder<EnrollmentValidationDto, EnrollmentValidationDto>()
-                .delegates(Arrays.asList(validationFirstProcessor, generatorFirstProcessor))
+                .delegates(Arrays.asList(validationFirstProcessor, preBuilderFileFirstProcessor))
                 .build();
 
     }

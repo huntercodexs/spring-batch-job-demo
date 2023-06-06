@@ -13,7 +13,7 @@ import java.io.*;
 import java.util.List;
 
 @Component
-public class GeneratorFirstWriter implements ItemWriter<EnrollmentValidationDto> {
+public class BuilderFileFirstWriter implements ItemWriter<EnrollmentValidationDto> {
 
     @Value("${txt.filepath}")
     String txtFilepath;

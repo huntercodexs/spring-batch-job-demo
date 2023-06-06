@@ -5,7 +5,7 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GeneratorFirstProcessor implements ItemProcessor<EnrollmentValidationDto, EnrollmentValidationDto> {
+public class PreBuilderFileFirstProcessor implements ItemProcessor<EnrollmentValidationDto, EnrollmentValidationDto> {
 
     public EnrollmentValidationDto process(EnrollmentValidationDto enrollmentValidationDto) {
 
