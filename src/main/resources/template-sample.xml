@@ -4,8 +4,10 @@
 		name;type;column;size;fill;align
 	</sequence>
 	<jsonKey>column</jsonKey>
-	<field name="f1" type="number" column="id" size="6" fill="0" align="left" />
+	<field name="f1" type="number" column="id" size="6" fill="0" align="right" />
 	<field name="f2" type="string" column="name" size="30" fill=" " align="left" />
-	<field name="f3" type="string" column="description" size="80" fill=" " align="right" />
-	<field name="f4" type="string" column="price" size="10" fill=" " align="left" />
+	<field name="f3" type="string" column="description" size="80" fill=" " align="left" />
+	<field name="f4" type="string" column="price" size="10" fill=" " align="right" />
+	<field name="f5" type="number" column="const1" size="15" fill="0" align="left" />
+	<field name="f6" type="string" column="const2" size="40" fill="X" align="right" />
 </template>

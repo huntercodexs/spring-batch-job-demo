@@ -1,12 +1,17 @@
 package com.huntercodexs.demojobs.jobs.enrollmentValidation.sftp;
 
+import com.jcraft.jsch.ChannelSftp;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.integration.sftp.session.DefaultSftpSessionFactory;
 import org.springframework.integration.sftp.session.SftpSession;
 import org.springframework.stereotype.Service;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class SftpHandler {
@@ -23,11 +28,19 @@ public class SftpHandler {
     @Value("${sftp.password}")
     String sftpPassword;
 
-    @Value("${sftp.folder-path}")
-    String sftpFolderPath;
+    @Value("${sftp.folder-upload-path}")
+    String sftpUploadPath;
+
+    @Value("${sftp.folder-receive-path}")
+    String sftpReceivePath;
+
+    @Value("${sftp.folder-download-path}")
+    String sftpDownloadPath;
 
     @Value("${sftp.allow.unknown-hosts}")
     boolean sftpAllowUnknownHosts;
+
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("uuuuMMddHHmmss");
 
     private DefaultSftpSessionFactory sftpConnect() {
         DefaultSftpSessionFactory factory = new DefaultSftpSessionFactory();
@@ -45,7 +58,7 @@ public class SftpHandler {
     private void ftpStore(InputStream inputStream, String fileName) throws IOException {
         try {
             SftpSession session = sftpConnect().getSession();
-            session.write(inputStream, sftpFolderPath
+            session.write(inputStream, sftpUploadPath
                     .replaceAll("/$", "")+"/"+fileName);
             System.out.println("Sftp Send file successfully !");
         } catch (RuntimeException re) {
@@ -54,11 +67,53 @@ public class SftpHandler {
         }
     }
 
-    public void uploadFile(InputStream inputStream, String fileName) throws IOException {
+    private void ftpRead(String filename) throws IOException {
+        LocalDateTime dateTimeNow = LocalDateTime.now();
+        String dateTimeFormat = dateTimeNow.format(FORMATTER);
+
+        try {
+            OutputStream os = new FileOutputStream(sftpDownloadPath.replaceAll("/$", "") + "/" + filename.split("\\.")[0] + "-" + dateTimeFormat + ".download");
+            SftpSession session = sftpConnect().getSession();
+            session.read(sftpReceivePath.replaceAll("/$", "") + "/" + filename, os);
+        } catch (RuntimeException re) {
+            System.out.println("Sftp Error to receive file !");
+            throw new RuntimeException(re.getMessage());
+        }
+    }
+
+    public ChannelSftp.LsEntry[] list(String path) throws IOException {
+        try {
+            SftpSession session = sftpConnect().getSession();
+            return session.list(path);
+        } catch (RuntimeException re) {
+            System.out.println("Sftp Error to list files !");
+            throw new RuntimeException(re.getMessage());
+        }
+    }
+
+    public String[] files(String path) throws IOException {
+        try {
+            SftpSession session = sftpConnect().getSession();
+            return session.listNames(path);
+        } catch (RuntimeException re) {
+            System.out.println("Sftp Error to list files name !");
+            throw new RuntimeException(re.getMessage());
+        }
+    }
+
+    public void upload(InputStream inputStream, String fileName) throws IOException {
         try {
             ftpStore(inputStream, fileName);
         } catch (RuntimeException re) {
-            throw new RuntimeException("Sftp Error " + re.getMessage());
+            throw new RuntimeException("uploadFile: Sftp Error " + re.getMessage());
+        }
+    }
+
+    public void download(String filename) throws IOException {
+        try {
+            ftpRead(filename);
+        } catch (RuntimeException re) {
+            throw new RuntimeException("downloadFile: Sftp Error " + re.getMessage());
         }
     }
 }

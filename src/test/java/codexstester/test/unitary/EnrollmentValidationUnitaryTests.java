@@ -2,6 +2,7 @@ package codexstester.test.unitary;
 
 import codexstester.setup.bridge.EnrollmentValidationBridgeTests;
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.dto.EnrollmentValidationDto;
+import com.huntercodexs.demojobs.jobs.enrollmentValidation.sftp.SftpHandler;
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.xml.XmlToJsonTemplate;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +10,16 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 public class EnrollmentValidationUnitaryTests extends EnrollmentValidationBridgeTests {
 
     @Autowired
     XmlToJsonTemplate xmlToJsonTemplate;
+
+    @Autowired
+    SftpHandler sftpHandler;
 
     @Test
     public void propsTest() {
@@ -68,6 +73,46 @@ public class EnrollmentValidationUnitaryTests extends EnrollmentValidationBridge
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    @Test
+    public void generatorTest() throws ParserConfigurationException, IOException, SAXException {
+        EnrollmentValidationDto enrollmentValidationDto = new EnrollmentValidationDto();
+        enrollmentValidationDto.setId(12345);
+        enrollmentValidationDto.setName("Product Name");
+        enrollmentValidationDto.setDescription("Description to product");
+        enrollmentValidationDto.setPrice("100,00");
+
+        String record = "";
+
+        xmlToJsonTemplate.xmlLoader(null);
+
+        System.out.println(xmlToJsonTemplate.jsonObject());
+
+        record += String.format(xmlToJsonTemplate.format("id"), enrollmentValidationDto.getId()) + "|";
+        record += String.format(xmlToJsonTemplate.format("name"), enrollmentValidationDto.getName()) + "|";
+        record += String.format(xmlToJsonTemplate.format("description"), enrollmentValidationDto.getDescription()) + "|";
+        record += String.format(xmlToJsonTemplate.format("price"), enrollmentValidationDto.getPrice()) + "|";
+        record += xmlToJsonTemplate.filler("const1", "999") + "|";
+        record += xmlToJsonTemplate.filler("const2", "F1F2F3F4F5F6F7F8F9F0") + "|";
+
+        System.out.println("RESULT");
+        System.out.println(record);
+    }
+
+    @Test
+    public void sftpReadTest() throws IOException {
+        sftpHandler.download("spring-batch-job-demo-data-20230605151800.txt");
+    }
+
+    @Test
+    public void sftpListTest() throws IOException {
+        System.out.println(Arrays.toString(sftpHandler.list("upload/")));
+    }
+
+    @Test
+    public void sftpFilesTest() throws IOException {
+        System.out.println(Arrays.toString(sftpHandler.files("upload/")));
     }
 
 }

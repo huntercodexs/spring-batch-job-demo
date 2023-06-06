@@ -16,8 +16,6 @@ import java.util.List;
 @Component
 public class SendFileToSftpWriter implements ItemWriter<EnrollmentValidationDto> {
 
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("uuuuMMddHHmmss");
-
     @Value("${txt.filepath}")
     String txtFilepath;
 
@@ -26,6 +24,8 @@ public class SendFileToSftpWriter implements ItemWriter<EnrollmentValidationDto>
 
     @Autowired
     SftpHandler sftpHandler;
+
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("uuuuMMddHHmmss");
 
     @Override
     public void write(List<? extends EnrollmentValidationDto> enrollmentValidationDto) throws IOException {
@@ -36,7 +36,7 @@ public class SendFileToSftpWriter implements ItemWriter<EnrollmentValidationDto>
         System.out.println("[DEBUG] >>> SFTP FILE");
 
         try {
-            sftpHandler.uploadFile(fileExtractor(), txtFilename.split("\\.")[0] + "-" + dateTimeFormat + ".txt");
+            sftpHandler.upload(fileExtractor(), txtFilename.split("\\.")[0] + "-" + dateTimeFormat + ".txt");
         } catch (RuntimeException re) {
             System.out.println(re.getMessage());
         }
