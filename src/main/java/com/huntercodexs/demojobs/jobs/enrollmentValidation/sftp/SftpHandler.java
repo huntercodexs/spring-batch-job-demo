@@ -31,11 +31,11 @@ public class SftpHandler {
     @Value("${sftp.folder-upload-path}")
     String sftpUploadPath;
 
-    @Value("${sftp.folder-receive-path}")
-    String sftpReceivePath;
-
     @Value("${sftp.folder-download-path}")
     String sftpDownloadPath;
+
+    @Value("${sftp.localfolder-receive-path}")
+    String sftpLocalFolderPath;
 
     @Value("${sftp.allow.unknown-hosts}")
     boolean sftpAllowUnknownHosts;
@@ -72,9 +72,9 @@ public class SftpHandler {
         String dateTimeFormat = dateTimeNow.format(FORMATTER);
 
         try {
-            OutputStream os = new FileOutputStream(sftpDownloadPath.replaceAll("/$", "") + "/" + filename.split("\\.")[0] + "-" + dateTimeFormat + ".download");
+            OutputStream os = new FileOutputStream(sftpLocalFolderPath.replaceAll("/$", "") + "/" + filename.split("\\.")[0] + "-" + dateTimeFormat + ".download");
             SftpSession session = sftpConnect().getSession();
-            session.read(sftpReceivePath.replaceAll("/$", "") + "/" + filename, os);
+            session.read(sftpDownloadPath.replaceAll("/$", "") + "/" + filename, os);
         } catch (RuntimeException re) {
             System.out.println("Sftp Error to receive file !");
             throw new RuntimeException(re.getMessage());
@@ -82,6 +82,9 @@ public class SftpHandler {
     }
 
     public ChannelSftp.LsEntry[] list(String path) throws IOException {
+
+        if (path == null) path = sftpDownloadPath;
+
         try {
             SftpSession session = sftpConnect().getSession();
             return session.list(path);
@@ -92,6 +95,9 @@ public class SftpHandler {
     }
 
     public String[] files(String path) throws IOException {
+
+        if (path == null) path = sftpDownloadPath;
+
         try {
             SftpSession session = sftpConnect().getSession();
             return session.listNames(path);
