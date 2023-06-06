@@ -2,6 +2,7 @@ package codexstester.test.unitary;
 
 import codexstester.setup.bridge.EnrollmentValidationBridgeTests;
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.dto.EnrollmentValidationDto;
+import com.huntercodexs.demojobs.jobs.enrollmentValidation.sftp.SftpHandler;
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.xml.XmlToJsonTemplate;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +10,16 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 public class EnrollmentValidationUnitaryTests extends EnrollmentValidationBridgeTests {
 
     @Autowired
     XmlToJsonTemplate xmlToJsonTemplate;
+
+    @Autowired
+    SftpHandler sftpHandler;
 
     @Test
     public void propsTest() {
@@ -68,6 +73,21 @@ public class EnrollmentValidationUnitaryTests extends EnrollmentValidationBridge
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    @Test
+    public void sftpReadTest() throws IOException {
+        sftpHandler.download("spring-batch-job-demo-data-20230605151800.txt");
+    }
+
+    @Test
+    public void sftpListTest() throws IOException {
+        System.out.println(Arrays.toString(sftpHandler.list("upload/")));
+    }
+
+    @Test
+    public void sftpFilesTest() throws IOException {
+        System.out.println(Arrays.toString(sftpHandler.files("upload/")));
     }
 
 }
