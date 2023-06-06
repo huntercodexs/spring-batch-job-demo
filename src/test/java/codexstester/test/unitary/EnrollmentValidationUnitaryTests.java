@@ -3,6 +3,7 @@ package codexstester.test.unitary;
 import codexstester.setup.bridge.EnrollmentValidationBridgeTests;
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.dto.EnrollmentValidationDto;
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.sftp.SftpHandler;
+import com.huntercodexs.demojobs.jobs.enrollmentValidation.task.firststep.processor.PreBuilderFileFirstProcessor;
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.task.firststep.writer.ReportFirstWriter;
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.xml.XmlToJsonTemplate;
 import org.junit.Test;
@@ -25,6 +26,9 @@ public class EnrollmentValidationUnitaryTests extends EnrollmentValidationBridge
     
     @Autowired
     ReportFirstWriter reportFirstWriter;
+
+    @Autowired
+    PreBuilderFileFirstProcessor preBuilderFileFirstProcessor;
 
     @Test
     public void propsTest() {
@@ -130,6 +134,16 @@ public class EnrollmentValidationUnitaryTests extends EnrollmentValidationBridge
         enrollmentValidationDto.setPrice("100,00");
         enrollmentValidationDtoList.add(enrollmentValidationDto);
         reportFirstWriter.write(enrollmentValidationDtoList);
+    }
+
+    @Test
+    public void processorBuilderFileTest() throws ParserConfigurationException, IOException, SAXException {
+        EnrollmentValidationDto enrollmentValidationDto = new EnrollmentValidationDto();
+        enrollmentValidationDto.setId(12345);
+        enrollmentValidationDto.setName("Product Name");
+        enrollmentValidationDto.setDescription("Description to product");
+        enrollmentValidationDto.setPrice("100,00");
+        preBuilderFileFirstProcessor.process(enrollmentValidationDto);
     }
 
 }

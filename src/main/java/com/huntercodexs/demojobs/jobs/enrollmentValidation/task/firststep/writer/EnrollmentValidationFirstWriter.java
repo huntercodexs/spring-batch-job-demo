@@ -23,9 +23,6 @@ public class EnrollmentValidationFirstWriter {
 
     @Bean("writerFirstStep")
     public ItemWriter<EnrollmentValidationDto> writerFirstStep() {
-
-        System.out.println("[DEBUG] [WRITER-FIRST-STEP] >>> writerFirstStep");
-
         return new CompositeItemWriterBuilder<EnrollmentValidationDto>()
             .delegates(Arrays.asList(
                     builderFileFirstWriter,

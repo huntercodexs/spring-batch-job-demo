@@ -29,8 +29,6 @@ public class EnrollmentValidationJobConfig {
     ) {
         if (!jobEnabled) return null;
 
-        System.out.println("[DEBUG] [JOB-CONFIG] >>> enrollmentValidationJob");
-
         return jobBuilderFactory
                 .get("enrollmentValidationJob")
                 .start(step1)

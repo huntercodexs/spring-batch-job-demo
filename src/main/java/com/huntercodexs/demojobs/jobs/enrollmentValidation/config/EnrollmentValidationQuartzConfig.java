@@ -32,8 +32,6 @@ public class EnrollmentValidationQuartzConfig extends QuartzJobBean {
     protected void executeInternal(JobExecutionContext context) {
         if (!jobEnabled) return;
 
-        System.out.println("[DEBUG] [QUARTZ] >>> executeInternal");
-
         JobParameters jobParameters = new JobParametersBuilder(this.jobExplorer)
             .addDate("date", new Date())
             .getNextJobParameters(this.job)

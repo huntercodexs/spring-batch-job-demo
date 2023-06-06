@@ -23,9 +23,6 @@ public class EnrollmentValidationFirstStep {
         @Qualifier("processorFirstStep") ItemProcessor<EnrollmentValidationDto, EnrollmentValidationDto> firstStepItemProcessor,
         @Qualifier("writerFirstStep") ItemWriter<EnrollmentValidationDto> firstStepItemWriter
     ) {
-
-        System.out.println("[FIRST-STEP] >>> firstStep");
-
         return stepBuilderFactory
             .get("firstStep")
             .<EnrollmentValidationDto, EnrollmentValidationDto>chunk(5_000)

@@ -21,8 +21,6 @@ public class EnrollmentValidationFirstProcessor {
     @Bean("processorFirstStep")
     public ItemProcessor<EnrollmentValidationDto, EnrollmentValidationDto> processorFirstStep() {
 
-        System.out.println("[DEBUG] [PROCESSOR-FIRST-STEP] >>> processorFirstStep");
-
         return new CompositeItemProcessorBuilder<EnrollmentValidationDto, EnrollmentValidationDto>()
                 .delegates(Arrays.asList(validationFirstProcessor, preBuilderFileFirstProcessor))
                 .build();

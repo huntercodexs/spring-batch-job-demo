@@ -9,16 +9,24 @@ public class ValidationFirstProcessor implements ItemProcessor<EnrollmentValidat
 
     public EnrollmentValidationDto process(EnrollmentValidationDto enrollmentValidationDto) throws Exception {
 
-        System.out.println("[DEBUG] [VALIDATION-PROCESSOR] >>> process");
-        System.out.println(enrollmentValidationDto.toString());
-
         if (enrollmentValidationDto.getId() < 1) {
-            System.out.println("[DEBUG] Missing item id: " + enrollmentValidationDto.getId());
+            System.out.println("Missing item id: " + enrollmentValidationDto.getId());
             return null;
         }
 
         if (enrollmentValidationDto.getName().equals("")) {
-            System.out.println("[DEBUG] Missing item name: " + enrollmentValidationDto.getName());
+            System.out.println("Missing item name: " + enrollmentValidationDto.getName());
+            return null;
+        }
+
+        if (enrollmentValidationDto.getDescription().equals("")) {
+            System.out.println("Missing item description: " + enrollmentValidationDto.getDescription());
+            return null;
+        }
+
+        if (enrollmentValidationDto.getPrice().equals("")) {
+            System.out.println("Missing item price: " + enrollmentValidationDto.getPrice());
+            return null;
         }
 
         return enrollmentValidationDto;
