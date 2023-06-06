@@ -33,8 +33,6 @@ public class SendFileToSftpWriter implements ItemWriter<EnrollmentValidationDto>
         LocalDateTime dateTimeNow = LocalDateTime.now();
         String dateTimeFormat = dateTimeNow.format(FORMATTER);
 
-        System.out.println("[DEBUG] >>> SFTP FILE");
-
         try {
             sftpHandler.upload(fileExtractor(), txtFilename.split("\\.")[0] + "-" + dateTimeFormat + ".txt");
         } catch (RuntimeException re) {
@@ -50,7 +48,7 @@ public class SendFileToSftpWriter implements ItemWriter<EnrollmentValidationDto>
     }
 
     private InputStream fileExtractor() throws FileNotFoundException {
-        String content = fileReader(txtFilepath.replaceAll("/$", "") +"/"+ txtFilename);
+        String content = fileReader(sanitizePath(txtFilepath) + txtFilename);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
         return inputStream;
     }
@@ -86,14 +84,18 @@ public class SendFileToSftpWriter implements ItemWriter<EnrollmentValidationDto>
         String name = array[0];
         String extension = array[1];
 
-        File oldName = new File(txtFilepath +filename);
-        File newName = new File(txtFilepath +name+"-"+stamp+"."+extension+".processed");
+        File oldName = new File(sanitizePath(txtFilepath) + filename);
+        File newName = new File(sanitizePath(txtFilepath) + name +"-"+ stamp +"."+ extension +".processed");
 
         if (oldName.renameTo(newName)) {
-            System.out.println("[DEBUG] File renamed successful");
+            System.out.println("File "+ oldName +" renamed successful to " + newName);
         } else {
-            System.out.println("[DEBUG] File NOT renamed");
+            System.out.println("File "+ oldName +" NOT renamed to " + newName);
         }
 
+    }
+
+    private String sanitizePath(String path) {
+        return path.replaceAll("/$", "") +"/";
     }
 }

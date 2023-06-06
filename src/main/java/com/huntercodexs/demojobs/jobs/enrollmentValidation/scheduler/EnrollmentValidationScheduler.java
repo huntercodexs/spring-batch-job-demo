@@ -22,8 +22,6 @@ public class EnrollmentValidationScheduler {
     public JobDetail enrollmentValidationJobDetail() {
         if (!jobEnabled) return null;
 
-        System.out.println("[SCHEDULER][JOB-DETAIL] >>> enrollmentValidationJobDetail");
-
         return JobBuilder
                 .newJob(EnrollmentValidationQuartzConfig.class)
                 .storeDurably()
@@ -33,8 +31,6 @@ public class EnrollmentValidationScheduler {
     @Bean
     public Trigger enrollmentValidationTrigger() {
         if (!jobEnabled) return null;
-
-        System.out.println("[DEBUG] [SCHEDULER][TRIGGER] >>> enrollmentValidationTrigger");
 
         CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder
             .dailyAtHourAndMinute(jobHour, jobMinute);

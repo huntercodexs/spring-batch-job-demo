@@ -30,9 +30,6 @@ public class BuilderFileFirstWriter implements ItemWriter<EnrollmentValidationDt
         xmlToJsonTemplate.xmlLoader(null);
 
         enrollmentValidationDto.forEach(enrollmentItem -> {
-            System.out.println("[DEBUG] [WRITE] >>> GeneratorFirstWriter");
-            System.out.println("[DEBUG] " + enrollmentItem.getName());
-
             try {
                 fileGeneratorByStream(enrollmentItem);
             } catch (Exception ex) {
