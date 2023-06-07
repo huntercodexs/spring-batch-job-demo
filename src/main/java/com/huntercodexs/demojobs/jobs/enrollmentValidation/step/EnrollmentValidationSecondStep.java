@@ -1,6 +1,5 @@
 package com.huntercodexs.demojobs.jobs.enrollmentValidation.step;
 
-import com.huntercodexs.demojobs.jobs.enrollmentValidation.dto.EnrollmentValidationDto;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.item.ItemProcessor;
@@ -19,16 +18,16 @@ public class EnrollmentValidationSecondStep {
 
     @Bean
     public Step secondStep(
-        @Qualifier("readerSecondStep") ItemReader<EnrollmentValidationDto> secondStepItemReader,
-        @Qualifier("processorSecondStep") ItemProcessor<EnrollmentValidationDto, EnrollmentValidationDto> secondStepItemProcessor,
-        @Qualifier("writerSecondStep") ItemWriter<EnrollmentValidationDto> secondStepItemWriter
+        @Qualifier("readerSecondStep") ItemReader<String> secondStepItemReader,
+        @Qualifier("processorSecondStep") ItemProcessor<String, String> secondStepItemProcessor,
+        @Qualifier("writerSecondStep") ItemWriter<String> secondStepItemWriter
     ) {
 
         System.out.println("[SECOND-STEP] >>> secondStep");
 
         return stepBuilderFactory
             .get("secondStep")
-            .<EnrollmentValidationDto, EnrollmentValidationDto>chunk(5_000)
+            .<String, String>chunk(5_000)
             .reader(secondStepItemReader)
             .processor(secondStepItemProcessor)
             .writer(secondStepItemWriter)

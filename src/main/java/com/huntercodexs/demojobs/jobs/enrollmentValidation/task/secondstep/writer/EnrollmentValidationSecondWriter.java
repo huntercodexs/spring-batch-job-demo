@@ -1,6 +1,5 @@
 package com.huntercodexs.demojobs.jobs.enrollmentValidation.task.secondstep.writer;
 
-import com.huntercodexs.demojobs.jobs.enrollmentValidation.dto.EnrollmentValidationDto;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.support.builder.CompositeItemWriterBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +21,11 @@ public class EnrollmentValidationSecondWriter {
     ConsolidationSecondWriter consolidationSecondWriter;
 
     @Bean("writerSecondStep")
-    public ItemWriter<EnrollmentValidationDto> writerSecondStep() {
+    public ItemWriter<String> writerSecondStep() {
 
         System.out.println("[WRITER-SECOND-STEP] >>> writerSecondStep");
 
-        return new CompositeItemWriterBuilder<EnrollmentValidationDto>()
+        return new CompositeItemWriterBuilder<String>()
             .delegates(Arrays.asList(validationSecondWriter, reportSecondWriter, consolidationSecondWriter))
             .build();
     }
