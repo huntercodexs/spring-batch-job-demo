@@ -7,19 +7,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 public class EnrollmentValidationSecondWriter {
 
     @Autowired
-    ValidationSecondWriter validationSecondWriter;
+    DownloadFileFromSftpSecondWriter downloadFileFromSftpSecondWriter;
 
     @Autowired
     ReportSecondWriter reportSecondWriter;
-
-    @Autowired
-    ConsolidationSecondWriter consolidationSecondWriter;
 
     @Bean("writerSecondStep")
     public ItemWriter<String> writerSecondStep() {
@@ -27,7 +23,7 @@ public class EnrollmentValidationSecondWriter {
         System.out.println("[WRITER-SECOND-STEP] >>> writerSecondStep");
 
         return new CompositeItemWriterBuilder<String>()
-            .delegates(Arrays.asList(validationSecondWriter, reportSecondWriter, consolidationSecondWriter))
+            .delegates(Arrays.asList(downloadFileFromSftpSecondWriter, reportSecondWriter))
             .build();
     }
 }

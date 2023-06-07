@@ -44,7 +44,7 @@ public class SftpHandler {
     boolean sftpAllowUnknownHosts;
 
     private String sanitizePath(String path) {
-        return path.replaceAll("/$", "") +"/";
+        return path.replaceAll("/$", "") + "/";
     }
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("uuuuMMddHHmmss");
@@ -125,6 +125,16 @@ public class SftpHandler {
             return session.listNames(definePath(path));
         } catch (RuntimeException re) {
             System.out.println("Sftp Error to list files name !");
+            throw new RuntimeException(re.getMessage());
+        }
+    }
+
+    public boolean delete(String filepath) throws IOException {
+        try {
+            SftpSession session = sftpConnect().getSession();
+            return session.remove(filepath);
+        } catch (RuntimeException re) {
+            System.out.println("Sftp Error to remove file !");
             throw new RuntimeException(re.getMessage());
         }
     }

@@ -96,6 +96,6 @@ public class SendFileToSftpWriter implements ItemWriter<EnrollmentValidationDto>
     }
 
     private String sanitizePath(String path) {
-        return path.replaceAll("/$", "") +"/";
+        return path.replaceAll("/$", "") + "/";
     }
 }

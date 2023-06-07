@@ -50,7 +50,7 @@ public class PreBuilderFileFirstProcessor implements ItemProcessor<EnrollmentVal
     }
 
     private String sanitizePath(String path) {
-        return path.replaceAll("/$", "") +"/";
+        return path.replaceAll("/$", "") + "/";
     }
 
 }
