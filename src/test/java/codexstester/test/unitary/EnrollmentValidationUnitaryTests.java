@@ -5,8 +5,10 @@ import com.huntercodexs.demojobs.jobs.enrollmentValidation.dto.EnrollmentValidat
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.sftp.SftpHandler;
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.task.firststep.processor.PreBuilderFileFirstProcessor;
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.task.firststep.writer.ReportFirstWriter;
+import com.huntercodexs.demojobs.jobs.enrollmentValidation.task.secondstep.reader.EnrollmentValidationSecondReader;
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.xml.XmlToJsonTemplate;
 import org.junit.Test;
+import org.springframework.batch.item.ItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.xml.sax.SAXException;
 
@@ -15,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class EnrollmentValidationUnitaryTests extends EnrollmentValidationBridgeTests {
 
@@ -29,6 +32,9 @@ public class EnrollmentValidationUnitaryTests extends EnrollmentValidationBridge
 
     @Autowired
     PreBuilderFileFirstProcessor preBuilderFileFirstProcessor;
+
+    @Autowired
+    EnrollmentValidationSecondReader enrollmentValidationSecondReader;
 
     @Test
     public void propsTest() {
@@ -111,17 +117,17 @@ public class EnrollmentValidationUnitaryTests extends EnrollmentValidationBridge
 
     @Test
     public void sftpReadTest() throws IOException {
-        sftpHandler.download("spring-batch-job-demo-data-20230605151800.txt");
+        sftpHandler.download("spring-batch-job-demo-data-20230607135403.txt.response");
     }
 
     @Test
     public void sftpListTest() throws IOException {
-        System.out.println(Arrays.toString(sftpHandler.list("upload/")));
+        System.out.println(Arrays.toString(sftpHandler.all("download/")));
     }
 
     @Test
     public void sftpFilesTest() throws IOException {
-        System.out.println(Arrays.toString(sftpHandler.files("upload/")));
+        System.out.println(Arrays.toString(sftpHandler.names("download/")));
     }
 
     @Test
@@ -144,6 +150,14 @@ public class EnrollmentValidationUnitaryTests extends EnrollmentValidationBridge
         enrollmentValidationDto.setDescription("Description to product");
         enrollmentValidationDto.setPrice("100,00");
         preBuilderFileFirstProcessor.process(enrollmentValidationDto);
+    }
+
+    @Test
+    public void readerSecondStepTest() throws Exception {
+        ItemReader<String> r = enrollmentValidationSecondReader.readerSecondStep();
+        System.out.println(r.read());
+        System.out.println(r.read());
+        System.out.println(Arrays.toString(Objects.requireNonNull(r.read()).lines().toArray()));
     }
 
 }

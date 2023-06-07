@@ -1,39 +1,24 @@
 package com.huntercodexs.demojobs.jobs.enrollmentValidation.task.secondstep.reader;
 
-import com.huntercodexs.demojobs.jobs.enrollmentValidation.dto.EnrollmentValidationDto;
-import com.huntercodexs.demojobs.jobs.enrollmentValidation.mapper.EnrollmentValidationMapper;
-import org.springframework.batch.item.database.JdbcCursorItemReader;
-import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.huntercodexs.demojobs.jobs.enrollmentValidation.sftp.SftpHandler;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.sql.DataSource;
+import java.io.IOException;
 
 @Configuration
 public class EnrollmentValidationSecondReader {
 
+    @Autowired
+    SftpHandler sftpHandler;
+
     @Bean
-    public JdbcCursorItemReader<EnrollmentValidationDto> readerSecondStep(
-            @Qualifier("mysqlDataSource") DataSource dataSource
-    ) {
-
-        String sql =
-        """
-        SELECT * FROM PRODUCTS
-        """;
-
-        System.out.println("[READER-SECOND-STEP] >>> readerSecondStep");
-
-        return new JdbcCursorItemReaderBuilder<EnrollmentValidationDto>()
-            .name("secondStepReader")
-            .sql(sql)
-            .dataSource(dataSource)
-            .rowMapper(new EnrollmentValidationMapper())
-            .verifyCursorPosition(false)
-            .build();
-
+    public ItemReader<String> readerSecondStep() throws IOException {
+        return new InMemorySecondReader(sftpHandler);
     }
+
 }
 
 

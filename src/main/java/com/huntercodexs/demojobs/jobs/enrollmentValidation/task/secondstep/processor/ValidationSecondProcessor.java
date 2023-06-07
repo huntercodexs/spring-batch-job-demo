@@ -1,23 +1,21 @@
 package com.huntercodexs.demojobs.jobs.enrollmentValidation.task.secondstep.processor;
 
-import com.huntercodexs.demojobs.jobs.enrollmentValidation.dto.EnrollmentValidationDto;
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-public class ValidationSecondProcessor implements ItemProcessor<EnrollmentValidationDto, EnrollmentValidationDto> {
+@Component
+public class ValidationSecondProcessor implements ItemProcessor<String, String> {
 
-    public EnrollmentValidationDto process(EnrollmentValidationDto enrollmentValidationDto) throws Exception {
+    @Value("${sftp.extension-files-download}")
+    String expectedFileExtension;
 
-        System.out.println("[VALIDATION-PROCESSOR] >>> process");
+    public String process(String list) throws Exception {
 
-        if (enrollmentValidationDto.getId() < 1) {
-            System.out.println("Missing item id: " + enrollmentValidationDto.getId());
-            return null;
+        if (list.contains(expectedFileExtension)) {
+            return list;
         }
 
-        if (enrollmentValidationDto.getName().equals("")) {
-            System.out.println("Missing item name: " + enrollmentValidationDto.getName());
-        }
-
-        return enrollmentValidationDto;
+        return null;
     }
 }
