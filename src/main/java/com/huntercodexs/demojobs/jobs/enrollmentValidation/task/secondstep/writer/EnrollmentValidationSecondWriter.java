@@ -20,8 +20,6 @@ public class EnrollmentValidationSecondWriter {
     @Bean("writerSecondStep")
     public ItemWriter<String> writerSecondStep() {
 
-        System.out.println("[WRITER-SECOND-STEP] >>> writerSecondStep");
-
         return new CompositeItemWriterBuilder<String>()
             .delegates(Arrays.asList(downloadFileFromSftpSecondWriter, reportSecondWriter))
             .build();

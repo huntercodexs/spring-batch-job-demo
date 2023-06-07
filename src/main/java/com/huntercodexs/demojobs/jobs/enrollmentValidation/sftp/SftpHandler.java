@@ -58,7 +58,6 @@ public class SftpHandler {
     }
 
     private String definePath(String path) {
-
         if (path == null) {
             path = sanitizePath(sftpDownloadPath) + "/";
         } else {
@@ -98,11 +97,11 @@ public class SftpHandler {
     }
 
     private void ftpRead(String filename) throws IOException {
-
         try {
             OutputStream os = new FileOutputStream(createDownloadName(filename));
             SftpSession session = sftpConnect().getSession();
             session.read(sftpDownloadPath.replaceAll("/$", "") + "/" + filename, os);
+            System.out.println("Sftp Download file successfully !");
         } catch (RuntimeException re) {
             System.out.println("Sftp Error to receive file !");
             throw new RuntimeException(re.getMessage());

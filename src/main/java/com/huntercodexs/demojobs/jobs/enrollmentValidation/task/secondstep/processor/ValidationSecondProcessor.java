@@ -12,11 +12,7 @@ public class ValidationSecondProcessor implements ItemProcessor<String, String> 
 
     public String process(String list) throws Exception {
 
-        System.out.println("[VALIDATION-PROCESSOR] >>> process");
-        System.out.println(list);
-
         if (list.contains(expectedFileExtension)) {
-            System.out.println(">>> "+list);
             return list;
         }
 

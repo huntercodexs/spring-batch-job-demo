@@ -21,20 +21,31 @@ public class DownloadFileFromSftpSecondWriter implements ItemWriter<String> {
     @Override
     public void write(List<? extends String> list) {
 
-        System.out.println("678XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-        System.out.println(list);
-        System.out.println(list.size());
-        System.out.println("678XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        downloadFiles(list);
+        deleteFiles(list);
 
+    }
+
+    private void downloadFiles(List<? extends String> list) {
         list.forEach(filename -> {
             try {
                 sftpHandler.download(filename);
-                sftpHandler.delete(sanitizePath(sftpDownloadPath)+filename);
+                System.out.println("File downloaded: " + filename);
             } catch (RuntimeException | IOException re) {
-                System.out.println(re.getMessage());
+                System.out.println("SFTP Download file error: " + re.getMessage());
             }
         });
+    }
 
+    private void deleteFiles(List<? extends String> list) {
+        list.forEach(filename -> {
+            try {
+                sftpHandler.delete(sanitizePath(sftpDownloadPath)+filename);
+                System.out.println("File deleted: " + filename);
+            } catch (RuntimeException | IOException re) {
+                System.out.println("SFTP Delete file error: " + re.getMessage());
+            }
+        });
     }
 
     private String sanitizePath(String path) {

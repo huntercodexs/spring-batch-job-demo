@@ -17,8 +17,6 @@ public class EnrollmentValidationSecondProcessor {
     @Bean("processorSecondStep")
     public ItemProcessor<String, String> processorSecondStep() {
 
-        System.out.println("[PROCESSOR-SECOND-STEP] >>> processorSecondStep");
-
         return new CompositeItemProcessorBuilder<String, String>()
                 .delegates(Arrays.asList(validationSecondProcessor))
                 .build();
