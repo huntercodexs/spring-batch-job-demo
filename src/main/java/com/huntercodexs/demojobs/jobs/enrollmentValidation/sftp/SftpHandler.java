@@ -37,17 +37,39 @@ public class SftpHandler {
     @Value("${sftp.localfolder-receive-path}")
     String sftpLocalFolderPath;
 
+    @Value("${sftp.extension-files-download:}")
+    String sftpExtensionFiles;
+
     @Value("${sftp.allow.unknown-hosts}")
     boolean sftpAllowUnknownHosts;
 
+    private String sanitizePath(String path) {
+        return path.replaceAll("/$", "") +"/";
+    }
+
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("uuuuMMddHHmmss");
 
-    private String createName(String filename) {
+    private String createDownloadName(String filename) {
         LocalDateTime dateTimeNow = LocalDateTime.now();
         String dateTimeFormat = dateTimeNow.format(FORMATTER);
         return sftpLocalFolderPath.
                 replaceAll("/$", "") + "/" +
                 filename.split("\\.")[0] + "-" + dateTimeFormat + ".download";
+    }
+
+    private String definePath(String path) {
+
+        if (path == null) {
+            path = sanitizePath(sftpDownloadPath) + "/";
+        } else {
+            path = sanitizePath(path);
+        }
+
+        if (!sftpExtensionFiles.equals("")) {
+            path = sanitizePath(path) + "/*" + sftpExtensionFiles;
+        }
+
+        return path;
     }
 
     private DefaultSftpSessionFactory sftpConnect() {
@@ -78,7 +100,7 @@ public class SftpHandler {
     private void ftpRead(String filename) throws IOException {
 
         try {
-            OutputStream os = new FileOutputStream(createName(filename));
+            OutputStream os = new FileOutputStream(createDownloadName(filename));
             SftpSession session = sftpConnect().getSession();
             session.read(sftpDownloadPath.replaceAll("/$", "") + "/" + filename, os);
         } catch (RuntimeException re) {
@@ -87,26 +109,20 @@ public class SftpHandler {
         }
     }
 
-    public ChannelSftp.LsEntry[] list(String path) throws IOException {
-
-        if (path == null) path = sftpDownloadPath;
-
+    public ChannelSftp.LsEntry[] all(String path) throws IOException {
         try {
             SftpSession session = sftpConnect().getSession();
-            return session.list(path);
+            return session.list(definePath(path));
         } catch (RuntimeException re) {
             System.out.println("Sftp Error to list files !");
             throw new RuntimeException(re.getMessage());
         }
     }
 
-    public String[] files(String path) throws IOException {
-
-        if (path == null) path = sftpDownloadPath;
-
+    public String[] names(String path) throws IOException {
         try {
             SftpSession session = sftpConnect().getSession();
-            return session.listNames(path);
+            return session.listNames(definePath(path));
         } catch (RuntimeException re) {
             System.out.println("Sftp Error to list files name !");
             throw new RuntimeException(re.getMessage());

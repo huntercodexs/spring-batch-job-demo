@@ -11,7 +11,7 @@ public class InMemorySecondReader implements ItemReader<String> {
     private final String[] filenames;
 
     InMemorySecondReader(SftpHandler sftpHandler) throws IOException {
-        filenames = sftpHandler.files(null);
+        filenames = sftpHandler.names(null);
         nextFilenameIndex = 0;
     }
 

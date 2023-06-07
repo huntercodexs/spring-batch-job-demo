@@ -117,17 +117,17 @@ public class EnrollmentValidationUnitaryTests extends EnrollmentValidationBridge
 
     @Test
     public void sftpReadTest() throws IOException {
-        sftpHandler.download("spring-batch-job-demo-data-20230606133100.txt.response");
+        sftpHandler.download("spring-batch-job-demo-data-20230607135403.txt.response");
     }
 
     @Test
     public void sftpListTest() throws IOException {
-        System.out.println(Arrays.toString(sftpHandler.list("download/")));
+        System.out.println(Arrays.toString(sftpHandler.all("download/")));
     }
 
     @Test
     public void sftpFilesTest() throws IOException {
-        System.out.println(sftpHandler.files("download/").toString());
+        System.out.println(Arrays.toString(sftpHandler.names("download/")));
     }
 
     @Test

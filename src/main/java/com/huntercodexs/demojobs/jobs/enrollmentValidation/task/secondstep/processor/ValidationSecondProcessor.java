@@ -11,6 +11,11 @@ public class ValidationSecondProcessor implements ItemProcessor<String, String> 
         System.out.println("[VALIDATION-PROCESSOR] >>> process");
         System.out.println(list);
 
-        return list;
+        if (list.contains(".txt.response")) {
+            System.out.println(">>> "+list);
+            return list;
+        }
+
+        return null;
     }
 }
