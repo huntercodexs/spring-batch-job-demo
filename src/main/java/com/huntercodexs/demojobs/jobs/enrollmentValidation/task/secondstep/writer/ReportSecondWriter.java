@@ -2,18 +2,20 @@ package com.huntercodexs.demojobs.jobs.enrollmentValidation.task.secondstep.writ
 
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Configuration
+@Component
 public class ReportSecondWriter implements ItemWriter<String> {
 
     @Override
-    public void write(List<? extends String> enrollmentValidationDto) {
+    public void write(List<? extends String> list) {
 
-        enrollmentValidationDto.forEach(enrollmentItem -> {
-            System.out.println("[WRITE] >>> ReportWriter");
-        });
+        System.out.println("456XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        System.out.println(list);
+        System.out.println(list.size());
+        System.out.println("456XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
     }
 }

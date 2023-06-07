@@ -2,38 +2,31 @@ package com.huntercodexs.demojobs.jobs.enrollmentValidation.task.secondstep.read
 
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.sftp.SftpHandler;
 import org.springframework.batch.item.ItemReader;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.IOException;
 
 public class InMemorySecondReader implements ItemReader<String> {
 
     private int nextFilenameIndex;
-    private String[] filenames;
+    private final String[] filenames;
 
-    @Autowired
-    SftpHandler sftpHandler;
-
-    InMemorySecondReader() {
-        initialize();
-    }
-
-    private void initialize() {
-        filenames = new String[]{"file1.txt"};
+    InMemorySecondReader(SftpHandler sftpHandler) throws IOException {
+        filenames = sftpHandler.files(null);
         nextFilenameIndex = 0;
     }
 
     @Override
     public String read() throws Exception {
-        String nextStudent = null;
+        String nextItem = null;
 
         if (nextFilenameIndex < filenames.length) {
-            nextStudent = filenames[nextFilenameIndex];
+            nextItem = filenames[nextFilenameIndex];
             nextFilenameIndex++;
-        }
-        else {
+        } else {
             nextFilenameIndex = 0;
         }
 
-        return nextStudent;
+        return nextItem;
     }
 }
 

@@ -42,6 +42,14 @@ public class SftpHandler {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("uuuuMMddHHmmss");
 
+    private String createName(String filename) {
+        LocalDateTime dateTimeNow = LocalDateTime.now();
+        String dateTimeFormat = dateTimeNow.format(FORMATTER);
+        return sftpLocalFolderPath.
+                replaceAll("/$", "") + "/" +
+                filename.split("\\.")[0] + "-" + dateTimeFormat + ".download";
+    }
+
     private DefaultSftpSessionFactory sftpConnect() {
         DefaultSftpSessionFactory factory = new DefaultSftpSessionFactory();
         factory.setHost(sftpHost);
@@ -68,11 +76,9 @@ public class SftpHandler {
     }
 
     private void ftpRead(String filename) throws IOException {
-        LocalDateTime dateTimeNow = LocalDateTime.now();
-        String dateTimeFormat = dateTimeNow.format(FORMATTER);
 
         try {
-            OutputStream os = new FileOutputStream(sftpLocalFolderPath.replaceAll("/$", "") + "/" + filename.split("\\.")[0] + "-" + dateTimeFormat + ".download");
+            OutputStream os = new FileOutputStream(createName(filename));
             SftpSession session = sftpConnect().getSession();
             session.read(sftpDownloadPath.replaceAll("/$", "") + "/" + filename, os);
         } catch (RuntimeException re) {
