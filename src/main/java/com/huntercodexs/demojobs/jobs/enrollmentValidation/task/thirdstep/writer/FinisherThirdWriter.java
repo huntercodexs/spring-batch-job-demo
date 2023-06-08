@@ -39,12 +39,8 @@ public class FinisherThirdWriter implements ItemWriter<String> {
             System.out.println("[WRITE] makeFileFinished !!!!");
             System.out.println(item);
 
-            String[] array = item.split("\\.");
-            String name = array[0];
-            String extension = array[1];
-
-            File oldName = new File(sanitizePath(localFilepathDownload) + name);
-            File newName = new File(sanitizePath(localFilepathFinished) + name +"-."+ extension +".finished");
+            File oldName = new File(sanitizePath(localFilepathDownload) + item);
+            File newName = new File(sanitizePath(localFilepathFinished) + item +".finished");
 
             if (oldName.renameTo(newName)) {
                 System.out.println("File "+ oldName +" renamed successful to " + newName);

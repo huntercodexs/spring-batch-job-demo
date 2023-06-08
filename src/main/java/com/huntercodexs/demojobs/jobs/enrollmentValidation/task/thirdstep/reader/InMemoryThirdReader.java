@@ -9,10 +9,13 @@ public class InMemoryThirdReader implements ItemReader<String> {
     private int nextFilenameIndex;
     private final String[] filenames;
 
+    public FileHandlerThirdReader FileHandlerThirdReader;
+
     InMemoryThirdReader(FileHandlerThirdReader fileHandlerThirdReader) throws IOException {
 
         System.out.println("[READER-THIRD-STEP] >>> InMemoryThirdReader");
 
+        this.FileHandlerThirdReader = fileHandlerThirdReader;
         filenames = fileHandlerThirdReader.list();
         nextFilenameIndex = 0;
     }
@@ -29,14 +32,9 @@ public class InMemoryThirdReader implements ItemReader<String> {
             nextFilenameIndex++;
         } else {
             nextFilenameIndex = 0;
+            new InMemoryThirdReader(this.FileHandlerThirdReader);
         }
 
         return nextItem;
     }
 }
-
-
-
-
-
-
