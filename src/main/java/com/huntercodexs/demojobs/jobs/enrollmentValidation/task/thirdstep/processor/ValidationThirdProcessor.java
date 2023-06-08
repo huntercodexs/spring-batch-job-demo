@@ -8,11 +8,7 @@ public class ValidationThirdProcessor implements ItemProcessor<String,String> {
 
     public String process(String list) throws Exception {
 
-        System.out.println("[VALIDATOR-THIRD-PROCESSOR] >>> process");
-        System.out.println(list);
-
         if (list.contains(".download")) {
-            System.out.println(" >>> " + list);
             return list;
         }
 

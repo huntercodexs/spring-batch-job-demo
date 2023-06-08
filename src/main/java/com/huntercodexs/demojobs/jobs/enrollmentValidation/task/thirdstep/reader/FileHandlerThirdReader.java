@@ -17,7 +17,7 @@ public class FileHandlerThirdReader {
         File file = new File(listFolderPath);
         String[] filenames = file.list();
 
-        System.out.println("[LIST-THIRD-READER] LIST " + Arrays.toString(filenames));
+        System.out.println(Arrays.toString(filenames));
 
         return filenames;
     }

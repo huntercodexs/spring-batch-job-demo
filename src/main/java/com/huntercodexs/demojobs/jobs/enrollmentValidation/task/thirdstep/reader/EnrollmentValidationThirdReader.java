@@ -15,11 +15,7 @@ public class EnrollmentValidationThirdReader {
 
     @Bean
     public ItemReader<String> readerThirdStep() throws IOException {
-
-        System.out.println("[READER-THIRD-STEP] >>> readerThirdStep");
-
-        return new InMemoryThirdReader(fileHandlerThirdReader);
-
+        return new LoaderFileHandlerThirdReader(fileHandlerThirdReader);
     }
 
 }

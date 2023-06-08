@@ -21,10 +21,6 @@ public class FinisherThirdWriter implements ItemWriter<String> {
     public void write(List<? extends String> list) throws IOException {
 
         try {
-
-            System.out.println("[WRITE] write !!!!");
-            System.out.println(list);
-
             makeFileFinished(list);
         } catch (RuntimeException re) {
             System.out.println(re.getMessage());
@@ -35,9 +31,6 @@ public class FinisherThirdWriter implements ItemWriter<String> {
     private void makeFileFinished(List<? extends String> list) {
 
         list.forEach(item -> {
-
-            System.out.println("[WRITE] makeFileFinished !!!!");
-            System.out.println(item);
 
             File oldName = new File(sanitizePath(localFilepathDownload) + item);
             File newName = new File(sanitizePath(localFilepathFinished) + item +".finished");

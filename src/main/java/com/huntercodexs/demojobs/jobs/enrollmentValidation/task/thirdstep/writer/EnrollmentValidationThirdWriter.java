@@ -18,9 +18,6 @@ public class EnrollmentValidationThirdWriter {
 
     @Bean("writerThirdStep")
     public ItemWriter<String> writerThirdStep() {
-
-        System.out.println("[WRITER-THIRD-STEP] >>> writerThirdStep");
-
         return new CompositeItemWriterBuilder<String>()
             .delegates(Arrays.asList(reportThirdWriter, finisherThirdWriter))
             .build();

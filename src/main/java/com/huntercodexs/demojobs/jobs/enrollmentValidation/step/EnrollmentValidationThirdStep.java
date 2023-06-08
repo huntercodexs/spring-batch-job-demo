@@ -22,9 +22,6 @@ public class EnrollmentValidationThirdStep {
         @Qualifier("processorThirdStep") ItemProcessor<String, String> thirdStepItemProcessor,
         @Qualifier("writerThirdStep") ItemWriter<String> thirdStepItemWriter
     ) {
-
-        System.out.println("[THIRD-STEP] >>> thirdStep");
-
         return stepBuilderFactory
             .get("thirdStep")
             .<String, String>chunk(5_000)
