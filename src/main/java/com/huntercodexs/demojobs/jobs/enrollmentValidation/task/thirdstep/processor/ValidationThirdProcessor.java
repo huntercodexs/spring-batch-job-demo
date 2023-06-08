@@ -1,23 +1,17 @@
 package com.huntercodexs.demojobs.jobs.enrollmentValidation.task.thirdstep.processor;
 
-import com.huntercodexs.demojobs.jobs.enrollmentValidation.dto.EnrollmentValidationDto;
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.stereotype.Component;
 
-public class ValidationThirdProcessor implements ItemProcessor<EnrollmentValidationDto,EnrollmentValidationDto> {
+@Component
+public class ValidationThirdProcessor implements ItemProcessor<String,String> {
 
-    public EnrollmentValidationDto process(EnrollmentValidationDto enrollmentValidationDto) throws Exception {
+    public String process(String list) throws Exception {
 
-        System.out.println("[VALIDATION-PROCESSOR] >>> process");
-
-        if (enrollmentValidationDto.getId() < 1) {
-            System.out.println("Missing item id: " + enrollmentValidationDto.getId());
-            return null;
+        if (list.contains(".download")) {
+            return list;
         }
 
-        if (enrollmentValidationDto.getName().equals("")) {
-            System.out.println("Missing item name: " + enrollmentValidationDto.getName());
-        }
-
-        return enrollmentValidationDto;
+        return null;
     }
 }

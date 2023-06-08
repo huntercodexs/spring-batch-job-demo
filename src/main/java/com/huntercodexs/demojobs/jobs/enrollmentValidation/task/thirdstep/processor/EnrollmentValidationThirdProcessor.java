@@ -1,19 +1,27 @@
 package com.huntercodexs.demojobs.jobs.enrollmentValidation.task.thirdstep.processor;
 
-import com.huntercodexs.demojobs.jobs.enrollmentValidation.dto.EnrollmentValidationDto;
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.support.builder.CompositeItemProcessorBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Arrays;
 
 @Configuration
 public class EnrollmentValidationThirdProcessor {
 
+    @Autowired
+    ValidationThirdProcessor validationThirdProcessor;
+
     @Bean("processorThirdStep")
-    public ItemProcessor<EnrollmentValidationDto, EnrollmentValidationDto> processorThirdStep() {
+    public ItemProcessor<String, String> processorThirdStep() {
 
         System.out.println("[PROCESSOR-THIRD-STEP] >>> processorThirdStep");
 
-        return new ValidationThirdProcessor();
+        return new CompositeItemProcessorBuilder<String, String>()
+                .delegates(Arrays.asList(validationThirdProcessor))
+                .build();
     }
 
 }

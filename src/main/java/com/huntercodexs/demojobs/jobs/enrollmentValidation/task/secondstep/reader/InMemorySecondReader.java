@@ -4,6 +4,7 @@ import com.huntercodexs.demojobs.jobs.enrollmentValidation.sftp.SftpHandler;
 import org.springframework.batch.item.ItemReader;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class InMemorySecondReader implements ItemReader<String> {
 
@@ -13,6 +14,8 @@ public class InMemorySecondReader implements ItemReader<String> {
     InMemorySecondReader(SftpHandler sftpHandler) throws IOException {
         filenames = sftpHandler.names(null);
         nextFilenameIndex = 0;
+
+        System.out.println("[FILENAMES] InMemorySecondReader " + Arrays.toString(filenames));
     }
 
     @Override
