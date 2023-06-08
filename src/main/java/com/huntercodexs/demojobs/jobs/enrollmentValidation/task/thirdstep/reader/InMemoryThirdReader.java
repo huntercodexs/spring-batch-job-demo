@@ -1,25 +1,27 @@
-package com.huntercodexs.demojobs.jobs.enrollmentValidation.task.secondstep.reader;
+package com.huntercodexs.demojobs.jobs.enrollmentValidation.task.thirdstep.reader;
 
-import com.huntercodexs.demojobs.jobs.enrollmentValidation.sftp.SftpHandler;
 import org.springframework.batch.item.ItemReader;
 
 import java.io.IOException;
-import java.util.Arrays;
 
-public class InMemorySecondReader implements ItemReader<String> {
+public class InMemoryThirdReader implements ItemReader<String> {
 
     private int nextFilenameIndex;
     private final String[] filenames;
 
-    InMemorySecondReader(SftpHandler sftpHandler) throws IOException {
-        filenames = sftpHandler.names(null);
-        nextFilenameIndex = 0;
+    InMemoryThirdReader(FileHandlerThirdReader fileHandlerThirdReader) throws IOException {
 
-        System.out.println("[FILENAMES] InMemorySecondReader " + Arrays.toString(filenames));
+        System.out.println("[READER-THIRD-STEP] >>> InMemoryThirdReader");
+
+        filenames = fileHandlerThirdReader.list();
+        nextFilenameIndex = 0;
     }
 
     @Override
     public String read() throws Exception {
+
+        System.out.println("[READER-THIRD-STEP] >>> InMemoryThirdReader read()");
+
         String nextItem = null;
 
         if (nextFilenameIndex < filenames.length) {

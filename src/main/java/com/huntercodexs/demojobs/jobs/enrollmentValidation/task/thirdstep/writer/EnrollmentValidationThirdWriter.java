@@ -1,6 +1,5 @@
 package com.huntercodexs.demojobs.jobs.enrollmentValidation.task.thirdstep.writer;
 
-import com.huntercodexs.demojobs.jobs.enrollmentValidation.dto.EnrollmentValidationDto;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.support.builder.CompositeItemWriterBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,23 +10,19 @@ import java.util.Arrays;
 
 @Configuration
 public class EnrollmentValidationThirdWriter {
-
-    @Autowired
-    ValidationThirdWriter validationThirdWriter;
-
     @Autowired
     ReportThirdWriter reportThirdWriter;
 
     @Autowired
-    ConsolidationThirdWriter consolidationThirdWriter;
+    FinisherThirdWriter finisherThirdWriter;
 
     @Bean("writerThirdStep")
-    public ItemWriter<EnrollmentValidationDto> writerThirdStep() {
+    public ItemWriter<String> writerThirdStep() {
 
         System.out.println("[WRITER-THIRD-STEP] >>> writerThirdStep");
 
-        return new CompositeItemWriterBuilder<EnrollmentValidationDto>()
-            .delegates(Arrays.asList(validationThirdWriter, reportThirdWriter, consolidationThirdWriter))
+        return new CompositeItemWriterBuilder<String>()
+            .delegates(Arrays.asList(reportThirdWriter, finisherThirdWriter))
             .build();
     }
 }

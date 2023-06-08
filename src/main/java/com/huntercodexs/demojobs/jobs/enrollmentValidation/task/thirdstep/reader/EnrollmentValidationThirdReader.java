@@ -1,43 +1,24 @@
 package com.huntercodexs.demojobs.jobs.enrollmentValidation.task.thirdstep.reader;
 
-import com.huntercodexs.demojobs.jobs.enrollmentValidation.dto.EnrollmentValidationDto;
-import com.huntercodexs.demojobs.jobs.enrollmentValidation.mapper.EnrollmentValidationMapper;
-import org.springframework.batch.item.database.JdbcCursorItemReader;
-import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.sql.DataSource;
+import java.io.IOException;
 
 @Configuration
 public class EnrollmentValidationThirdReader {
 
+    @Autowired
+    FileHandlerThirdReader fileHandlerThirdReader;
+
     @Bean
-    public JdbcCursorItemReader<EnrollmentValidationDto> readerThirdStep(
-            @Qualifier("mysqlDataSource") DataSource dataSource
-    ) {
+    public ItemReader<String> readerThirdStep() throws IOException {
 
-        String sql =
-        """
-        SELECT * FROM PRODUCTS
-        """;
+        System.out.println("[READER-THIRD-STEP] >>> readerThirdStep");
 
-        System.out.println("[READER-FIRST-STEP] >>> readerThirdStep");
-
-        return new JdbcCursorItemReaderBuilder<EnrollmentValidationDto>()
-            .name("thirdStepReader")
-            .sql(sql)
-            .dataSource(dataSource)
-            .rowMapper(new EnrollmentValidationMapper())
-            .verifyCursorPosition(false)
-            .build();
-
+        return new InMemoryThirdReader(fileHandlerThirdReader);
     }
+
 }
-
-
-
-
-
-
