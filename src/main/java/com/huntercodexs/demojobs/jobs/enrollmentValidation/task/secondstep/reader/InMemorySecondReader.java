@@ -9,17 +9,23 @@ import java.util.Arrays;
 public class InMemorySecondReader implements ItemReader<String> {
 
     private int nextFilenameIndex;
-    private final String[] filenames;
+    private String[] filenames;
+
+    public SftpHandler sftpHandler;
 
     InMemorySecondReader(SftpHandler sftpHandler) throws IOException {
-        filenames = sftpHandler.names(null);
+        this.sftpHandler = sftpHandler;
         nextFilenameIndex = 0;
-
-        System.out.println("[FILENAMES] InMemorySecondReader " + Arrays.toString(filenames));
     }
 
     @Override
     public String read() throws Exception {
+
+        /*Prevent overload requests*/
+        if (this.filenames == null) {
+            this.filenames = this.sftpHandler.names(null);
+        }
+
         String nextItem = null;
 
         if (nextFilenameIndex < filenames.length) {
@@ -27,6 +33,7 @@ public class InMemorySecondReader implements ItemReader<String> {
             nextFilenameIndex++;
         } else {
             nextFilenameIndex = 0;
+            this.filenames = null;
         }
 
         return nextItem;
