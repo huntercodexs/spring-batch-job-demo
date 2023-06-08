@@ -7,21 +7,24 @@ import java.io.IOException;
 public class InMemoryThirdReader implements ItemReader<String> {
 
     private int nextFilenameIndex;
-    private final String[] filenames;
 
-    public FileHandlerThirdReader FileHandlerThirdReader;
+    public FileHandlerThirdReader fileHandlerThirdReader;
+    private String[] filenames;
 
     InMemoryThirdReader(FileHandlerThirdReader fileHandlerThirdReader) throws IOException {
 
-        System.out.println("[READER-THIRD-STEP] >>> InMemoryThirdReader");
+        System.out.println("[READER-THIRD-STEP] >>> InMemoryThirdReader Constructor");
 
-        this.FileHandlerThirdReader = fileHandlerThirdReader;
-        filenames = fileHandlerThirdReader.list();
+        this.fileHandlerThirdReader = fileHandlerThirdReader;
         nextFilenameIndex = 0;
     }
 
     @Override
     public String read() throws Exception {
+
+        if (this.filenames == null) {
+            this.filenames = this.fileHandlerThirdReader.list();
+        }
 
         System.out.println("[READER-THIRD-STEP] >>> InMemoryThirdReader read()");
 
@@ -32,7 +35,7 @@ public class InMemoryThirdReader implements ItemReader<String> {
             nextFilenameIndex++;
         } else {
             nextFilenameIndex = 0;
-            new InMemoryThirdReader(this.FileHandlerThirdReader);
+            this.filenames = null;
         }
 
         return nextItem;

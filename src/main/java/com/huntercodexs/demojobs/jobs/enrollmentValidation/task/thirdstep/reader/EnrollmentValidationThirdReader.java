@@ -19,6 +19,7 @@ public class EnrollmentValidationThirdReader {
         System.out.println("[READER-THIRD-STEP] >>> readerThirdStep");
 
         return new InMemoryThirdReader(fileHandlerThirdReader);
+
     }
 
 }
