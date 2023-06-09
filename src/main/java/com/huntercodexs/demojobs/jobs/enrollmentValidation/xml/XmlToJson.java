@@ -1,5 +1,6 @@
 package com.huntercodexs.demojobs.jobs.enrollmentValidation.xml;
 
+import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 public class XmlToJson {
 
@@ -36,9 +38,12 @@ public class XmlToJson {
 
     public Document xmlParser(String xmlOverwrite) throws ParserConfigurationException, IOException, SAXException {
 
+        log.info("XmlToJson say: (xmlParser) The xmlParser was starting");
+
         if (xmlOverwrite != null) xmlFilename = xmlOverwrite;
 
         try {
+
             File file = new File("src/main/resources/" + xmlFilename);
 
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -49,11 +54,16 @@ public class XmlToJson {
             return document;
 
         } catch (RuntimeException re) {
+
+            log.error("XmlToJson say: (xmlParser) Exception : " + re.getMessage());
+
             throw new RuntimeException(re.getMessage());
         }
     }
 
     public String[] xmlFields(String xmlOverwrite) throws ParserConfigurationException, IOException, SAXException {
+
+        log.info("XmlToJson say: (xmlFields) The xmlFields was starting");
 
         NodeList sequence = xmlParser(xmlOverwrite).getElementsByTagName(fieldsSequence);
 
@@ -66,6 +76,8 @@ public class XmlToJson {
     }
 
     public void xmlLoader(String xmlOverwrite) throws ParserConfigurationException, SAXException, IOException {
+
+        log.info("XmlToJson say: (xmlLoader) The xmlLoader was starting using: " + xmlOverwrite);
 
         Document document = xmlParser(xmlOverwrite);
         String[] fields = xmlFields(xmlOverwrite);
@@ -94,13 +106,22 @@ public class XmlToJson {
     }
 
     public JSONObject jsonObject() {
+
+        log.info("XmlToJson say: (jsonObject) The jsonObject was starting");
+
         return this.jsonObject;
     }
 
     public JSONObject jsonItem(String jsonKey) {
+
+        log.info("XmlToJson say: (jsonItem) The jsonItem was starting");
+
         if (this.jsonObject.containsKey(jsonKey)) {
             return (JSONObject) this.jsonObject.get(jsonKey);
         }
+
+        log.error("XmlToJson say: (jsonItem) Invalid jsonKey: " + jsonKey);
+
         throw new RuntimeException("Invalid jsonKey " + jsonKey);
     }
 

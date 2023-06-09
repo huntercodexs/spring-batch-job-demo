@@ -1,11 +1,13 @@
 package com.huntercodexs.demojobs.jobs.enrollmentValidation.scheduler;
 
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.config.EnrollmentValidationQuartzConfig;
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+@Slf4j
 @Configuration
 public class EnrollmentValidationScheduler {
 
@@ -20,7 +22,11 @@ public class EnrollmentValidationScheduler {
 
     @Bean
     public JobDetail enrollmentValidationJobDetail() {
-        if (!jobEnabled) return null;
+
+        if (!jobEnabled) {
+            log.warn("Schedule say: (JobDetail) enrollmentValidationJob is disabled by properties");
+            return null;
+        }
 
         return JobBuilder
                 .newJob(EnrollmentValidationQuartzConfig.class)
@@ -30,10 +36,17 @@ public class EnrollmentValidationScheduler {
 
     @Bean
     public Trigger enrollmentValidationTrigger() {
-        if (!jobEnabled) return null;
+
+        if (!jobEnabled) {
+            log.warn("Schedule say: (Trigger) enrollmentValidationJob is disabled by properties");
+            return null;
+        }
 
         CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder
             .dailyAtHourAndMinute(jobHour, jobMinute);
+
+        log.info("Schedule say: (Trigger) enrollmentValidationJob is starting");
+        log.info("Schedule say: Cron Settings: " + cronScheduleBuilder);
 
         return TriggerBuilder
             .newTrigger()

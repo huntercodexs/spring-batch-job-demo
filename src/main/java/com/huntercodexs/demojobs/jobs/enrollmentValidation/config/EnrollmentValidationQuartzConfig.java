@@ -1,5 +1,6 @@
 package com.huntercodexs.demojobs.jobs.enrollmentValidation.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
 import org.springframework.batch.core.Job;
@@ -14,6 +15,7 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import java.util.Date;
 
+@Slf4j
 @DisallowConcurrentExecution
 public class EnrollmentValidationQuartzConfig extends QuartzJobBean {
 
@@ -30,7 +32,11 @@ public class EnrollmentValidationQuartzConfig extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext context) {
-        if (!jobEnabled) return;
+
+        if (!jobEnabled) {
+            log.warn("Quartz Config say: (executeInternal) enrollmentValidationJob is disabled by properties");
+            return;
+        }
 
         JobParameters jobParameters = new JobParametersBuilder(this.jobExplorer)
             .addDate("date", new Date())
@@ -39,7 +45,12 @@ public class EnrollmentValidationQuartzConfig extends QuartzJobBean {
 
         try {
             this.jobLauncher.run(this.job, jobParameters);
+
+            log.info("Quartz Config say: (executeInternal) enrollmentValidationJob is starting");
+            log.info("Quartz Config say: (executeInternal) jobParameters: " + jobParameters);
+
         } catch (Exception e) {
+            log.error("Quartz Config say: (executeInternal) exception: " + e.getMessage());
             e.printStackTrace();
         }
     }

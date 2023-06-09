@@ -1,6 +1,7 @@
 package com.huntercodexs.demojobs.jobs.enrollmentValidation.task.secondstep.reader;
 
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.sftp.SftpHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -8,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
 
+@Slf4j
 @Configuration
 public class EnrollmentValidationSecondReader {
 
@@ -16,7 +18,11 @@ public class EnrollmentValidationSecondReader {
 
     @Bean
     public ItemReader<String> readerSecondStep() throws IOException {
-        return new InMemorySecondReader(sftpHandler);
+
+        log.info("EnrollmentValidationSecondReader say: (readerSecondStep) readerSecondStep is starting");
+
+        return new LoaderSftpHandlerSecondReader(sftpHandler);
+
     }
 
 }

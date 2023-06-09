@@ -2,12 +2,14 @@ package com.huntercodexs.demojobs.jobs.enrollmentValidation.task.firststep.write
 
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.dto.EnrollmentValidationDto;
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.mail.MailHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Slf4j
 @Component
 public class ReportFirstWriter implements ItemWriter<EnrollmentValidationDto> {
 
@@ -23,6 +25,12 @@ public class ReportFirstWriter implements ItemWriter<EnrollmentValidationDto> {
 
     @Override
     public void write(List<? extends EnrollmentValidationDto> enrollmentValidationDto) {
+
+        /*Prevent send mail when not exists items*/
+        if (enrollmentValidationDto.size() == 0) {
+            log.info("ReportFirstWriter say: (write) not exists items to send mail");
+            return;
+        }
 
         enrollmentValidationDto.forEach(enrollmentItem -> {
             message(enrollmentItem);

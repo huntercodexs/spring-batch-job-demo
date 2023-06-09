@@ -21,6 +21,21 @@ public class MailHandler {
 
     public MailHandler(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
+        log.info("MailHandler say: The class was instanced");
+    }
+
+    public String subject(String stamp, String info, String username) {
+        log.info("MailHandler say: Details to send an email: ["+stamp+"] " + info + " " + username  );
+        return "["+stamp+"] " + info + " " + username;
+    }
+
+    public String content(String username, String message) {
+        String body = "<html><head></head><body>";
+        body += "<p>Username: " + username + "</p>";
+        body += "<p>It's just a test, please don't consider this email</p>";
+        body += "<p>Message: " + message + "</p>";
+        body += "</body></html>";
+        return body;
     }
 
     public void send(String to, String subject, String content) {
@@ -30,8 +45,10 @@ public class MailHandler {
             message.setSubject(subject);
             message.setText(content);
             javaMailSender.send(message);
+            log.info("MailHandler say: (send) One email was sent to: " + to + " with subject: " + subject);
         } catch (MailSendException me) {
             System.out.println(me.getMessage());
+            log.error("MailHandler say: (send) Occurred an error when tried to sent email to: " + to + " with subject: " + subject);
         }
     }
 
@@ -44,22 +61,11 @@ public class MailHandler {
             helper.setText(content, true);
             helper.addAttachment("logo.png", new ClassPathResource("logo.png"));
             javaMailSender.send(message);
+            log.info("MailHandler say: (attached) One email was sent to: " + to + " with subject: " + subject);
         } catch (MessagingException me) {
             System.out.println(me.getMessage());
+            log.error("MailHandler say: (attached) Occurred an error when tried to sent email to: " + to + " with subject: " + subject);
         }
-    }
-
-    public String subject(String stamp, String info, String username) {
-        return "["+stamp+"] " + info + " " + username;
-    }
-
-    public String content(String username, String message) {
-        String body = "<html><head></head><body>";
-        body += "<p>Username: " + username + "</p>";
-        body += "<p>It's just a test, please don't consider this email</p>";
-        body += "<p>Message: " + message + "</p>";
-        body += "</body></html>";
-        return body;
     }
 
 }
