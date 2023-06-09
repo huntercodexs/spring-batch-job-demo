@@ -41,7 +41,7 @@ execução do job
 
 O projeto pode ser descrito da seguinte forma: 
 
-- O nome do JOB foi definido para EnrollmentValidation;
+- O nome do JOB foi definido para enrollmentValidationJob;
 - O Job foi desenvolvido para processamento de cadastros de produtos que devem ser validados, enviados para o servidor 
 FTP e reportados para os responsaveis pelos produtos, como setor de vendas, estoque e compras.
 - O JOB possui 3 etapas (steps) e cada etapa possui 3 tarefas, leitura (reader), processameto (processor) e gravaçao (writer);

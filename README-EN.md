@@ -41,7 +41,7 @@ job execution
 
 The project can be described as follows:
 
-- The name of the JOB was set to EnrollmentValidation;
+- The name of the JOB was set to enrollmentValidationJob;
 - The Job was developed for processing product registrations that must be validated, sent to the server
   FTP and reported to those responsible for the products, such as sales, inventory and purchasing.
 - The JOB has 3 stages (steps) and each stage has 3 tasks, reading (reader), processing (processor) and recording (writer);
