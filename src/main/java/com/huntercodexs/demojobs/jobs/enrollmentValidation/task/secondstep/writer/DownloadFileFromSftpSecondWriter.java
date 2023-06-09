@@ -1,6 +1,7 @@
 package com.huntercodexs.demojobs.jobs.enrollmentValidation.task.secondstep.writer;
 
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.sftp.SftpHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @Component
 public class DownloadFileFromSftpSecondWriter implements ItemWriter<String> {
 
@@ -21,6 +23,8 @@ public class DownloadFileFromSftpSecondWriter implements ItemWriter<String> {
     @Override
     public void write(List<? extends String> list) {
 
+        log.info("DownloadFileFromSftpSecondWriter say: (write) starting");
+
         downloadFiles(list);
         deleteFiles(list);
 
@@ -30,9 +34,9 @@ public class DownloadFileFromSftpSecondWriter implements ItemWriter<String> {
         list.forEach(filename -> {
             try {
                 sftpHandler.download(filename);
-                System.out.println("File downloaded: " + filename);
+                log.info("DownloadFileFromSftpSecondWriter say: (downloadFiles) File downloaded: " + filename);
             } catch (RuntimeException | IOException re) {
-                System.out.println("SFTP Download file error: " + re.getMessage());
+                log.error("DownloadFileFromSftpSecondWriter say: (downloadFiles) SFTP Download file error: " + re.getMessage());
             }
         });
     }
@@ -41,9 +45,9 @@ public class DownloadFileFromSftpSecondWriter implements ItemWriter<String> {
         list.forEach(filename -> {
             try {
                 sftpHandler.delete(sanitizePath(sftpDownloadPath)+filename);
-                System.out.println("File deleted: " + filename);
+                log.info("DownloadFileFromSftpSecondWriter say: (deleteFiles) File deleted: " + filename);
             } catch (RuntimeException | IOException re) {
-                System.out.println("SFTP Delete file error: " + re.getMessage());
+                log.error("DownloadFileFromSftpSecondWriter say: (deleteFiles) SFTP Delete file error: " + re.getMessage());
             }
         });
     }

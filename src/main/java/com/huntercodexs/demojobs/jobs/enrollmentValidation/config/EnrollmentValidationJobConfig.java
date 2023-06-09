@@ -1,5 +1,6 @@
 package com.huntercodexs.demojobs.jobs.enrollmentValidation.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+@Slf4j
 @Configuration
 @EnableBatchProcessing
 public class EnrollmentValidationJobConfig {
@@ -27,7 +29,14 @@ public class EnrollmentValidationJobConfig {
         @Qualifier("secondStep") Step step2,
         @Qualifier("thirdStep") Step step3
     ) {
-        if (!jobEnabled) return null;
+
+        if (!jobEnabled) {
+            log.warn("Job Config say: enrollmentValidationJob is disabled by properties");
+            return null;
+        }
+
+        log.info("Job Config say: enrollmentValidationJob is starting");
+        log.info("Job Config say: The steps will be running: " + step1.toString() +", "+ step2.toString() + ", "+ step3.toString());
 
         return jobBuilderFactory
                 .get("enrollmentValidationJob")

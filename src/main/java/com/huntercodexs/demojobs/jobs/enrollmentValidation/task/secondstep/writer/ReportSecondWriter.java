@@ -1,12 +1,14 @@
 package com.huntercodexs.demojobs.jobs.enrollmentValidation.task.secondstep.writer;
 
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.mail.MailHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Slf4j
 @Component
 public class ReportSecondWriter implements ItemWriter<String> {
 
@@ -22,6 +24,12 @@ public class ReportSecondWriter implements ItemWriter<String> {
 
     @Override
     public void write(List<? extends String> list) {
+
+        /*Prevent send mail when not exists items*/
+        if (list.size() == 0) {
+            log.info("ReportSecondWriter say: (write) not exists items to send mail");
+            return;
+        }
 
         list.forEach(item -> {
             message(item);

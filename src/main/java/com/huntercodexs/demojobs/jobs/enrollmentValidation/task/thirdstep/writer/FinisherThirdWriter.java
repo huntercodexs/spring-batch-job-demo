@@ -1,5 +1,6 @@
 package com.huntercodexs.demojobs.jobs.enrollmentValidation.task.thirdstep.writer;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -8,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @Component
 public class FinisherThirdWriter implements ItemWriter<String> {
 
@@ -23,7 +25,7 @@ public class FinisherThirdWriter implements ItemWriter<String> {
         try {
             makeFileFinished(list);
         } catch (RuntimeException re) {
-            System.out.println(re.getMessage());
+            log.error("FinisherThirdWriter say: (write) exception: " + re.getMessage());
         }
 
     }
@@ -36,9 +38,9 @@ public class FinisherThirdWriter implements ItemWriter<String> {
             File newName = new File(sanitizePath(localFilepathFinished) + item +".finished");
 
             if (oldName.renameTo(newName)) {
-                System.out.println("File "+ oldName +" renamed successful to " + newName);
+                log.info("FinisherThirdWriter say: (makeFileFinished) File "+ oldName +" renamed successful to " + newName);
             } else {
-                System.out.println("File "+ oldName +" NOT renamed to " + newName);
+                log.info("FinisherThirdWriter say: (makeFileFinished) File "+ oldName +" NOT renamed to " + newName);
             }
 
         });

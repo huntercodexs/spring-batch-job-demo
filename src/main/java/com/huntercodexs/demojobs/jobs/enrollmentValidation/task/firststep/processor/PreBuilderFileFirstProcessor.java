@@ -2,6 +2,7 @@ package com.huntercodexs.demojobs.jobs.enrollmentValidation.task.firststep.proce
 
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.dto.EnrollmentValidationDto;
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.task.firststep.writer.BuilderFileFirstWriter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Component
 public class PreBuilderFileFirstProcessor implements ItemProcessor<EnrollmentValidationDto, EnrollmentValidationDto> {
 
@@ -34,12 +36,16 @@ public class PreBuilderFileFirstProcessor implements ItemProcessor<EnrollmentVal
         builderFileFirstWriter.write(enrollmentValidationDtoList);
 
         if (!checkFileBuilder().exists()) {
+            log.error("PreBuilderFileFirstProcessor say: (process) Error in process: File was not created !");
             throw new RuntimeException("Error in process: File was not created !");
         }
 
         boolean deleted = checkFileBuilder().delete();
 
-        if (!deleted) throw new RuntimeException("Error in process: File was not deleted !");
+        if (!deleted) {
+            log.error("PreBuilderFileFirstProcessor say: (process) File was not deleted !");
+            throw new RuntimeException("Error in process: File was not deleted !");
+        }
 
         return enrollmentValidationDto;
 

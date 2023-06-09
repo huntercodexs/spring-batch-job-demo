@@ -1,6 +1,7 @@
 package com.huntercodexs.demojobs.jobs.enrollmentValidation.sftp;
 
 import com.jcraft.jsch.ChannelSftp;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.integration.sftp.session.DefaultSftpSessionFactory;
 import org.springframework.integration.sftp.session.SftpSession;
@@ -13,6 +14,7 @@ import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@Slf4j
 @Service
 public class SftpHandler {
 
@@ -43,11 +45,11 @@ public class SftpHandler {
     @Value("${sftp.allow.unknown-hosts}")
     boolean sftpAllowUnknownHosts;
 
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("uuuuMMddHHmmss");
+
     private String sanitizePath(String path) {
         return path.replaceAll("/$", "") + "/";
     }
-
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("uuuuMMddHHmmss");
 
     private String createDownloadName(String filename) {
         LocalDateTime dateTimeNow = LocalDateTime.now();
@@ -68,30 +70,45 @@ public class SftpHandler {
             path = sanitizePath(path) + "/*" + sftpExtensionFiles;
         }
 
+        log.info("SftpHandler say: (definedPath) A path was defined: " + path);
+
         return path;
     }
 
     private DefaultSftpSessionFactory sftpConnect() {
         DefaultSftpSessionFactory factory = new DefaultSftpSessionFactory();
-        factory.setHost(sftpHost);
-        factory.setPort(sftpServerPort);
-        factory.setUser(sftpUsername);
-        factory.setPassword(sftpPassword);
-        factory.setAllowUnknownKeys(sftpAllowUnknownHosts);
-        /*If exists the trusted file to "know_hosts"*/
-        /*factory.setKnownHostsResource(new FileSystemResource("know_hosts"));*/
+
+        try {
+            factory.setHost(sftpHost);
+            factory.setPort(sftpServerPort);
+            factory.setUser(sftpUsername);
+            factory.setPassword(sftpPassword);
+            factory.setAllowUnknownKeys(sftpAllowUnknownHosts);
+            /*If exists the trusted file to "know_hosts"*/
+            /*factory.setKnownHostsResource(new FileSystemResource("know_hosts"));*/
+        } catch (RuntimeException re) {
+            log.error("SftpHandler say: (sftpConnect) Exception when tried create an factory: " + re.getMessage());
+            throw new RuntimeException(re.getMessage());
+        }
+
+        log.info("SftpHandler say: (sftpConnect) factory: " + factory);
 
         return factory;
     }
 
-    private void ftpStore(InputStream inputStream, String fileName) throws IOException {
+    private void ftpStore(InputStream inputStream, String filename) throws IOException {
         try {
             SftpSession session = sftpConnect().getSession();
             session.write(inputStream, sftpUploadPath
-                    .replaceAll("/$", "")+"/"+fileName);
-            System.out.println("Sftp Send file successfully !");
+                    .replaceAll("/$", "")+"/"+filename);
+
+            log.info("SftpHandler say: (ftpStore) Sftp Send file successfully: " + filename);
+
         } catch (RuntimeException re) {
-            System.out.println("Sftp Error to send file !");
+
+            log.error("SftpHandler say: (ftpStore) Sftp Error to send file: " + filename);
+            log.error("SftpHandler say: (ftpStore) message error: " + re.getMessage());
+
             throw new RuntimeException("Sftp Error " + re.getMessage());
         }
     }
@@ -101,9 +118,14 @@ public class SftpHandler {
             OutputStream os = new FileOutputStream(createDownloadName(filename));
             SftpSession session = sftpConnect().getSession();
             session.read(sftpDownloadPath.replaceAll("/$", "") + "/" + filename, os);
-            System.out.println("Sftp Download file successfully !");
+
+            log.info("SftpHandler say: (ftpRead) Sftp Download file successfully: " + filename);
+
         } catch (RuntimeException re) {
-            System.out.println("Sftp Error to receive file !");
+
+            log.error("SftpHandler say: (ftpRead) Sftp Error to receive file: " + filename);
+            log.error("SftpHandler say: (ftpRead) message error: " + re.getMessage());
+
             throw new RuntimeException(re.getMessage());
         }
     }
@@ -113,7 +135,10 @@ public class SftpHandler {
             SftpSession session = sftpConnect().getSession();
             return session.list(definePath(path));
         } catch (RuntimeException re) {
-            System.out.println("Sftp Error to list files !");
+
+            log.error("SftpHandler say: (all) Sftp Error to list files: " + path);
+            log.error("SftpHandler say: (all) message error: " + re.getMessage());
+
             throw new RuntimeException(re.getMessage());
         }
     }
@@ -123,7 +148,10 @@ public class SftpHandler {
             SftpSession session = sftpConnect().getSession();
             return session.listNames(definePath(path));
         } catch (RuntimeException re) {
-            System.out.println("Sftp Error to list files name !");
+
+            log.error("SftpHandler say: (names) Sftp Error to list files name: " + path);
+            log.error("SftpHandler say: (names) message error: " + re.getMessage());
+
             throw new RuntimeException(re.getMessage());
         }
     }
@@ -133,15 +161,23 @@ public class SftpHandler {
             SftpSession session = sftpConnect().getSession();
             return session.remove(filepath);
         } catch (RuntimeException re) {
-            System.out.println("Sftp Error to remove file !");
+
+            log.error("SftpHandler say: (delete) Sftp Error to remove file: " + filepath);
+            log.error("SftpHandler say: (delete) message error: " + re.getMessage());
+
             throw new RuntimeException(re.getMessage());
         }
     }
 
-    public void upload(InputStream inputStream, String fileName) throws IOException {
+    public void upload(InputStream inputStream, String filename) throws IOException {
         try {
-            ftpStore(inputStream, fileName);
+            ftpStore(inputStream, filename);
+            log.info("SftpHandler say: (upload) Upload file successful: " + filename);
         } catch (RuntimeException re) {
+
+            log.error("SftpHandler say: (upload) Sftp Error to upload file: " + filename);
+            log.error("SftpHandler say: (upload) message error: " + re.getMessage());
+
             throw new RuntimeException("uploadFile: Sftp Error " + re.getMessage());
         }
     }
@@ -149,7 +185,12 @@ public class SftpHandler {
     public void download(String filename) throws IOException {
         try {
             ftpRead(filename);
+            log.info("SftpHandler say: (download) Download file successful: " + filename);
         } catch (RuntimeException re) {
+
+            log.error("SftpHandler say: (download) Sftp Error to download file: " + filename);
+            log.error("SftpHandler say: (download) message error: " + re.getMessage());
+
             throw new RuntimeException("downloadFile: Sftp Error " + re.getMessage());
         }
     }

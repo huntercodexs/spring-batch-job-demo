@@ -2,6 +2,7 @@ package com.huntercodexs.demojobs.jobs.enrollmentValidation.task.firststep.write
 
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.dto.EnrollmentValidationDto;
 import com.huntercodexs.demojobs.jobs.enrollmentValidation.xml.XmlToJsonTemplate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +13,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.util.List;
 
+@Slf4j
 @Component
 public class BuilderFileFirstWriter implements ItemWriter<EnrollmentValidationDto> {
 
@@ -33,6 +35,7 @@ public class BuilderFileFirstWriter implements ItemWriter<EnrollmentValidationDt
             try {
                 fileGeneratorByStream(enrollmentItem);
             } catch (Exception ex) {
+                log.error("BuilderFileFirstWriter say: (write) Exception: " + ex.getMessage());
                 throw new RuntimeException(ex.getMessage());
             }
         });
