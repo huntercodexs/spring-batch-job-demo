@@ -26,7 +26,7 @@ This is a demo project to demonstrate how a job works using the java spring batc
 configuration formats and uses of spring batch to create a job, the standard definition of
 operation, as shown below:
 
-![spring-batch-default.png](data/media/spring-batch-default.png)
+![spring-batch-default.png](data/midias/spring-batch-default.png)
 
 The proposal goes beyond the demonstration of a flow for jobs using spring batch, where integrations will also be shown
 with external features like an SFTP server, sending email and reading files for bulk processing. Below
@@ -35,7 +35,7 @@ job execution
 
 - Overview Diagram
 
-![job-flow-structure-overview.png](data/media/job-flow-structure-overview-V2.png)
+![job-flow-structure-overview.png](data/midias/job-flow-structure-overview-V2.png)
 
 # Project presentation
 
